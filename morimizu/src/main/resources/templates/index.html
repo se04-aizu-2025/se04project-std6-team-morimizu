@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <title>Morimizu</title>
 </head>
@@ -24,32 +26,19 @@
 
     <div class="description">
         <h2>アルゴリズムの説明</h2>
-        <select name="algorithm" id="arg">
-            <option value="mizuno">アルゴリズム1</option>
-            <option value="mori">アルゴリズム2</option>
+        <select id="mySelect" onchange="changeAlg()">
+            <option value="0">選択してください</option>
+            <option value="1">アルゴリズム1</option>
+            <option value="2">アルゴリズム2</option>
         </select>
-        <p>アルゴリズム1は、効率的なデータソートを実現するための手法です。以下にその詳細を示します。</p>
-        <ul>
-            <li><strong>時間計算量:</strong> 平均 O(n log n)、最悪 O(n^2)。データの分布によって性能が変動します。</li>
-            <li><strong>メリット:</strong> 
-                <ul>
-                    <li>実装が簡単で、教育用途に適している。</li>
-                    <li>小規模なデータセットに対して高速。</li>
-                </ul>
-            </li>
-            <li><strong>デメリット:</strong>
-                <ul>
-                    <li>大規模なデータセットでは効率が低下する可能性がある。</li>
-                    <li>安定性が保証されない場合がある。</li>
-                </ul>
-            </li>
-        </ul>
+        <div id="contentArea"></div>
     </div>
 
     <div class="comparison">
         <p>アルゴリズムの比較</p>
     </div>
 
+    <script th:src="@{/js/script.js}"></script>
 </body>
 
 </html>

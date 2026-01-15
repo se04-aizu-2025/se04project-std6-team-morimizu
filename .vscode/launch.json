@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MorimizuApplication<morimizu>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.se04project.morimizu.MorimizuApplication",
+            "projectName": "morimizu",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
