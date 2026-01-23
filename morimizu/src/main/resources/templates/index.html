@@ -4,12 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Morimizu</title>
 </head>
 
 <body>
-    <h1>表示成功</h1>
-    <p>ページが正常に読み込まれました</p>
+    <h1 class="title">ソートアルゴリズム学習ツール</h1>
+    <div class="top-container">
+        <div class="visual-area">
+            <p>アルゴリズムの可視化</p>
+        </div>
+        <div class="control-panel">
+            <p>コントロールパネル</p>
+        </div>
+    </div>
+
+    <div class="description">
+        <h2>アルゴリズムの説明</h2>
+        <select id="mySelect" onchange="changeAlg()">
+            <option value="0">選択してください</option>
+            <option value="1">アルゴリズム1</option>
+            <option value="2">アルゴリズム2</option>
+        </select>
+        <div id="contentArea"></div>
+    </div>
+
+    <div class="comparison">
+        <p>アルゴリズムの比較</p>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
 </body>
 
 </html>
