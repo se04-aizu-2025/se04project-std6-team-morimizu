@@ -10,6 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <title>Morimizu</title>
 </head>
 
@@ -26,19 +27,55 @@
 
     <div class="description">
         <h2>アルゴリズムの説明</h2>
-        <select id="mySelect" onchange="changeAlg()">
-            <option value="0">選択してください</option>
-            <option value="1">アルゴリズム1</option>
-            <option value="2">アルゴリズム2</option>
+        <select id="mySelect" onchange="changeAlg(this, 'contentArea')">
+            <option value="Default">選択してください</option>
+            <option value="BubbleSort">バブルソート</option>
+            <option value="BucketSort">バケットソート</option>
+            <option value="HeapSort">ヒープソート</option>
+            <option value="InsertionSort">挿入ソート</option>
+            <option value="MergeSort">マージソート</option>
+            <option value="QuickSort">クイックソート</option>
+            <option value="RadixSort">基数ソート</option>
+            <option value="SelectionSort">選択ソート</option>
+            <option value="ShellSort">シェルソート</option>
         </select>
         <div id="contentArea"></div>
     </div>
 
     <div class="comparison">
-        <p>アルゴリズムの比較</p>
+        <h2>アルゴリズムの比較</h2>
+        <div>
+            <select id="mySelect2" onchange="changeAlg(this, 'contentArea2')">
+                <option value="Default">選択してください</option>
+                <option value="BubbleSort">バブルソート</option>
+                <option value="BucketSort">バケットソート</option>
+                <option value="HeapSort">ヒープソート</option>
+                <option value="InsertionSort">挿入ソート</option>
+                <option value="MergeSort">マージソート</option>
+                <option value="QuickSort">クイックソート</option>
+                <option value="RadixSort">基数ソート</option>
+                <option value="SelectionSort">選択ソート</option>
+                <option value="ShellSort">シェルソート</option>
+            </select>
+            <div id="contentArea2"></div>
+
+            <select id="mySelect3" onchange="changeAlg(this, 'contentArea3')">
+                <option value="Default">選択してください</option>
+                <option value="BubbleSort">バブルソート</option>
+                <option value="BucketSort">バケットソート</option>
+                <option value="HeapSort">ヒープソート</option>
+                <option value="InsertionSort">挿入ソート</option>
+                <option value="MergeSort">マージソート</option>
+                <option value="QuickSort">クイックソート</option>
+                <option value="RadixSort">基数ソート</option>
+                <option value="SelectionSort">選択ソート</option>
+                <option value="ShellSort">シェルソート</option>
+            </select>
+            <div id="contentArea3"></div>
+        </div>
     </div>
 
-    <script th:src="@{/js/script.js}"></script>
+    <script src="/js/script.js"></script>
 </body>
 
 </html>
