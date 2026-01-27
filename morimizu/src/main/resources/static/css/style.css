@@ -1,5 +1,14 @@
+body {
+    background-color: rgb(179, 255, 179);
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 10px;
+}
+
 .title {
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .visual-area {
@@ -9,7 +18,71 @@
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 55%;
+    flex: 1;
+    min-width: 400px;
+}
+
+.visual-area h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.chart-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 4px;
+    height: 300px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-height: 320px;
+}
+
+.bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    min-width: 35px;
+}
+
+.bar {
+    background-color: #4CAF50;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.1s ease, background-color 0.1s ease, width 0.1s ease;
+    min-height: 5px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    color: white;
+    font-size: 8px;
+    font-weight: bold;
+}
+
+.bar.active {
+    background-color: #FF9800;
+}
+
+.bar.comparing {
+    background-color: #2196F3;
+}
+
+.bar.sorted {
+    background-color: #4CAF50;
+}
+
+.bar-value {
+    font-size: 12px;
+    text-align: center;
+    color: #666;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
 }
 
 .control-panel {
@@ -19,6 +92,110 @@
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.control-panel h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.control-group label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.control-group input,
+.control-group select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.control-group input:disabled,
+.control-group select:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    color: #6c757d;
+}
+
+.button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.btn {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #ccc;
+    color: #666;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: #da190b;
+}
+
+.btn-control {
+    background-color: #2196F3;
+    color: white;
+    grid-column: span 1;
+}
+
+.btn-control:hover:not(:disabled) {
+    background-color: #0b7dda;
+}
+
+.btn-active {
+    background-color: #FF9800;
+    color: white;
+}
+
+.btn-active:hover:not(:disabled) {
+    background-color: #e68900;
+}
+
+#progressInfo {
+    font-size: 14px;
+    color: #666;
+    font-family: 'Roboto Mono', monospace;
     width: 550px;
     margin-left: auto;
 }
@@ -32,14 +209,58 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: 'Roboto Mono', monospace;
+}
+
+.description h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.description select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-bottom: 15px;
+}
+
+.comparison {
+    background-color: white;
+    padding: 20px;
+    margin-top: 30px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     max-width: 1200px;
+}
+
+.comparison h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
 }
 
 .top-container {
     display: flex;
     gap: 10px;
-    max-width: 1200px;
-    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 1200px) {
+    .top-container {
+        flex-direction: column;
+    }
+
+    .visual-area {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .control-panel {
+        width: 100%;
+    } 
 }
 
 * {
