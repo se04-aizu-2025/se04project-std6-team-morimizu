@@ -83,20 +83,58 @@
     <!-- アルゴリズム説明セクション -->
     <div class="description">
         <h2>アルゴリズムの説明</h2>
-        <select id="mySelect" onchange="changeAlg()">
-            <option value="0">選択してください</option>
-            <option value="1">アルゴリズム1</option>
-            <option value="2">アルゴリズム2</option>
+        <select id="mySelect" onchange="changeAlg(this, 'contentArea')">
+            <option value="Default">選択してください</option>
+            <option value="BubbleSort">バブルソート</option>
+            <option value="BucketSort">バケットソート</option>
+            <option value="HeapSort">ヒープソート</option>
+            <option value="InsertionSort">挿入ソート</option>
+            <option value="MergeSort">マージソート</option>
+            <option value="QuickSort">クイックソート</option>
+            <option value="RadixSort">基数ソート</option>
+            <option value="SelectionSort">選択ソート</option>
+            <option value="ShellSort">シェルソート</option>
         </select>
         <div id="contentArea"></div>
     </div>
 
-    <!-- 比較セクション -->
-    <div class="comparison">
-        <p>アルゴリズムの比較</p>
+    <div class="container">
+        <header>
+            <h1>アルゴリズム実装</h1>
+        </header>
+        <div class="content">
+            <div>
+                <div class="section">
+                    <h2>エディター</h2>
+                    <textarea id="userCode" placeholder="ここにコードを入力してください..."></textarea>
+                    <button onclick="executeCode()">実行</button>
+                    <div id="error" class="error" style="display:none;"></div>
+                </div>
+            </div>
+            <div>
+                <div class="section">
+                    <h2>実行結果</h2>
+                    <div id="result" class="result-box">実行結果がここに表示されます</div>
+                </div>
+                <div class="section">
+                    <h2>答え比較</h2>
+                    <div class="comparison">
+                        <div class="comparison-item">
+                            <h3>あなたの答え</h3>
+                            <div id="yourAnswer" class="comparison-box">-</div>
+                        </div>
+                        <div class="comparison-item">
+                            <h3>正解</h3>
+                            <div id="correctAnswer" class="comparison-box">-</div>
+                        </div>
+                    </div>
+                    <div id="status"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script th:src="@{/js/script.js}"></script>
+    <script src="/js/script.js"></script>
 </body>
 
 </html>
