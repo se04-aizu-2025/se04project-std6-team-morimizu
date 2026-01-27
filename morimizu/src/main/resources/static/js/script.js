@@ -23,6 +23,8 @@ const endBtn = document.getElementById('endBtn');
 const nextBtn = document.getElementById('nextBtn');
 const chartContainer = document.getElementById('chartContainer');
 const progressInfo = document.getElementById('progressInfo');
+const compareBtn = document.getElementById('compareBtn');
+const compareResult = document.getElementById('compareResult');
 
 let autoPlayInterval = null;
 
@@ -55,6 +57,7 @@ function init() {
     resetBtn.addEventListener('click', resetSort);
     endBtn.addEventListener('click', endSort);
     nextBtn.addEventListener('click', nextStep);
+    compareBtn.addEventListener('click', compareAlgorithms);
 
     updateControlPanel();
 }
@@ -251,7 +254,7 @@ function drawChart(array, highlightIndices = []) {
 
     const maxValue = Math.max(...array);
     const maxHeight = 250; // ピクセル
-    
+
     // 数列の長さに応じてバーの幅を調整
     // 最大30個の場合を想定して、コンテナ幅に合わせて調整
     const containerWidth = chartContainer.offsetWidth - 20; // パディングを除く
@@ -343,9 +346,8 @@ function updateProgressInfo() {
 }
 
 // 説明表示用の関数（既存）
-function changeAlg() {
-    const select = document.getElementById("mySelect");
-    const selectedValue = select.value;
+function changeAlg(element, targetId) {
+    const selectedValue = element.value;
 
     const contentArea = document.getElementById(targetId);
 
@@ -381,6 +383,262 @@ function compareResults(userResult) {
     if (userResult) {
         statusDiv.innerHTML = '<div class="success">実装完了</div>';
     }
+}
+
+/**
+ * コード入力タイプ (JavaScript / Java) に応じて UI を切り替え
+ */
+function updateTestUI() {
+    const codeType = document.getElementById('codeType').value;
+    const jsPanel = document.getElementById('jsTestPanel');
+    const javaPanel = document.getElementById('javaTestPanel');
+
+    if (codeType === 'java') {
+        jsPanel.style.display = 'none';
+        javaPanel.style.display = 'block';
+    } else {
+        jsPanel.style.display = 'block';
+        javaPanel.style.display = 'none';
+    }
+}
+
+/**
+ * Java コードをコンパイル・実行
+ */
+async function compileAndTestJava() {
+    const userCode = document.getElementById('userCode').value;
+    const testAlgorithm = document.getElementById('javaTestAlgorithm').value;
+    const testArraySize = parseInt(document.getElementById('javaTestArraySize').value);
+    const errorDiv = document.getElementById('error');
+    const statusDiv = document.getElementById('status');
+    const testResultsDiv = document.getElementById('testResults');
+
+    // バリデーション
+    if (!userCode.trim()) {
+        alert('Java コードを入力してください');
+        return;
+    }
+
+    if (!testAlgorithm) {
+        alert('テストするアルゴリズムを選択してください');
+        return;
+    }
+
+    if (!testArraySize || testArraySize < 1 || testArraySize > 100) {
+        alert('テストデータサイズは1から100の間で指定してください');
+        return;
+    }
+
+    // ランダムテストデータを生成
+    const testData = generateRandomArray(testArraySize);
+    displayTestData(testData);
+
+    try {
+        errorDiv.style.display = 'none';
+
+        // バックエンド API を呼び出し
+        const response = await fetch('/api/compile-and-test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                javaCode: userCode,
+                testData: testData,
+                testAlgorithm: testAlgorithm
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('バックエンドエラー: ' + response.statusText);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            const userResult = result.userResult;
+            const backendResult = result.backendResult;
+
+            document.getElementById('yourAnswer').textContent = JSON.stringify(userResult, null, 2);
+            document.getElementById('correctAnswer').textContent = JSON.stringify(backendResult, null, 2);
+
+            // 結果を比較
+            compareTestResults(userResult, backendResult, testResultsDiv, statusDiv);
+        } else {
+            errorDiv.textContent = 'コンパイルエラー: ' + result.error;
+            errorDiv.style.display = 'block';
+            testResultsDiv.innerHTML = '<p style="color: red;">Java コンパイルエラー</p>';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        errorDiv.textContent = 'エラー: ' + error.message;
+        errorDiv.style.display = 'block';
+        testResultsDiv.innerHTML = '<p style="color: red;">通信エラー: ' + error.message + '</p>';
+    }
+}
+
+/**
+ * テストデータを生成して実行
+ */
+async function generateAndTest() {
+    const testAlgorithm = document.getElementById('testAlgorithm').value;
+    const testArraySize = parseInt(document.getElementById('testArraySize').value);
+    const errorDiv = document.getElementById('error');
+    const statusDiv = document.getElementById('status');
+    const testResultsDiv = document.getElementById('testResults');
+
+    // バリデーション
+    if (!testAlgorithm) {
+        alert('テストするアルゴリズムを選択してください');
+        return;
+    }
+
+    if (!testArraySize || testArraySize < 1 || testArraySize > 100) {
+        alert('テストデータサイズは1から100の間で指定してください');
+        return;
+    }
+
+    // ランダムテストデータを生成
+    const testData = generateRandomArray(testArraySize);
+    displayTestData(testData);
+
+    // ユーザーコードを実行
+    const userCode = document.getElementById('userCode').value;
+
+    if (!userCode.trim()) {
+        alert('ユーザーコードを入力してください');
+        return;
+    }
+
+    try {
+        errorDiv.style.display = 'none';
+
+        // バックエンドでJavaコードを実行
+        const response = await fetch('/api/execute-java-code', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                javaCode: userCode,
+                array: testData
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('ユーザーコード実行リクエスト失敗');
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            errorDiv.textContent = 'ユーザーコードのエラー: ' + data.error;
+            errorDiv.style.display = 'block';
+            testResultsDiv.innerHTML = '<p style="color: red;">ユーザーコード実行エラー</p>';
+            return;
+        }
+
+        const userResult = data.result;
+        document.getElementById('yourAnswer').textContent = JSON.stringify(userResult, null, 2);
+        document.getElementById('result').textContent = JSON.stringify(userResult, null, 2);
+
+        // バックエンドの実装結果を取得して比較
+        fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv);
+    } catch (error) {
+        errorDiv.textContent = 'ユーザーコードのエラー: ' + error.message;
+        errorDiv.style.display = 'block';
+        testResultsDiv.innerHTML = '<p style="color: red;">ユーザーコード実行エラー</p>';
+    }
+}
+
+/**
+ * ランダム配列を生成
+ */
+function generateRandomArray(size) {
+    const arr = [];
+    for (let i = 0; i < size; i++) {
+        arr.push(Math.floor(Math.random() * 100) + 1); // 1-100のランダム整数
+    }
+    return arr;
+}
+
+/**
+ * テストデータを表示
+ */
+function displayTestData(testData) {
+    const testDataDiv = document.getElementById('testData');
+    testDataDiv.textContent = '[' + testData.join(', ') + ']';
+}
+
+/**
+ * バックエンドから結果を取得して比較
+ */
+async function fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv) {
+    try {
+        // バックエンドAPIを呼び出し
+        const response = await fetch('/api/test-algorithm', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                array: testData,
+                algorithm: testAlgorithm
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('バックエンドエラー: ' + response.statusText);
+        }
+
+        const backendResult = await response.json();
+
+        document.getElementById('correctAnswer').textContent = JSON.stringify(backendResult, null, 2);
+
+        // 結果を比較
+        compareTestResults(userResult, backendResult, testResultsDiv, statusDiv);
+    } catch (error) {
+        console.error('Error:', error);
+        testResultsDiv.innerHTML = '<p style="color: red;">バックエンド通信エラー: ' + error.message + '</p>';
+    }
+}
+
+/**
+ * テスト結果を比較
+ */
+function compareTestResults(userResult, correctResult, testResultsDiv, statusDiv) {
+    const isCorrect = arraysEqual(userResult, correctResult);
+
+    if (isCorrect) {
+        statusDiv.innerHTML = '<div style="background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px;">合格</div>';
+        testResultsDiv.innerHTML = '<p style="color: #4CAF50; font-weight: bold;">あなたの実装は正解です！</p>';
+    } else {
+        statusDiv.innerHTML = '<div style="background-color: #f44336; color: white; padding: 10px; border-radius: 5px;">不合格</div>';
+        testResultsDiv.innerHTML = '<p style="color: #f44336; font-weight: bold;">あなたの実装が正解と異なります</p>' +
+            '<p><strong>差分:</strong></p>' +
+            '<pre style="background-color: #f9f9f9; padding: 10px; border-radius: 3px; overflow-x: auto;">' +
+            '期待値: ' + JSON.stringify(correctResult) + '\n' +
+            'あなたの結果: ' + JSON.stringify(userResult) +
+            '</pre>';
+    }
+}
+
+/**
+ * 配列が等しいかを判定
+ */
+function arraysEqual(arr1, arr2) {
+    if (!Array.isArray(arr1) || !Array.isArray(arr2)) {
+        return false;
+    }
+    if (arr1.length !== arr2.length) {
+        return false;
+    }
+    for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 const algData = {
@@ -558,6 +816,102 @@ const algData = {
         </ul>
     `
 };
+
+/**
+ * 複数アルゴリズムを比較する関数
+ */
+async function compareAlgorithms() {
+    // チェックボックスから選択されたアルゴリズムを取得
+    const checkboxes = document.querySelectorAll('.compare-algo:checked');
+    const selectedAlgorithms = Array.from(checkboxes).map(cb => cb.value);
+
+    // 入力値を取得
+    const array = parseArrayInput();
+
+    // バリデーション
+    if (!array || array.length === 0) {
+        compareResult.innerHTML = '<p style="color: red;">エラー：数列を入力してください</p>';
+        return;
+    }
+
+    if (selectedAlgorithms.length < 2) {
+        compareResult.innerHTML = '<p style="color: red;">エラー：2つ以上のアルゴリズムを選択してください</p>';
+        return;
+    }
+
+    // 比較結果表示エリアを初期化
+    compareResult.innerHTML = '<p style="color: blue;">比較実行中...</p>';
+
+    try {
+        const response = await fetch('/api/compare-algorithms', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                array: array,
+                algorithms: selectedAlgorithms
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('API呼び出しに失敗しました');
+        }
+
+        const data = await response.json();
+
+        // 結果を表示
+        displayCompareResult(data, selectedAlgorithms);
+
+    } catch (error) {
+        compareResult.innerHTML = `<p style="color: red;">エラー: ${error.message}</p>`;
+    }
+}
+
+/**
+ * 比較結果を表示する関数
+ */
+function displayCompareResult(data, selectedAlgorithms) {
+    let html = '';
+
+    // メッセージを表示（正解/不正解）
+    if (data.allSame) {
+        html += `<div style="background-color: #e8f5e9; border: 2px solid #4caf50; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                    <h3 style="color: #2e7d32; margin: 0;">✓ ${data.message}</h3>
+                </div>`;
+    } else {
+        html += `<div style="background-color: #ffebee; border: 2px solid #f44336; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                    <h3 style="color: #c62828; margin: 0;">✗ ${data.message}</h3>
+                </div>`;
+    }
+
+    // 各アルゴリズムの結果を表示
+    html += '<h3>各アルゴリズムの結果:</h3>';
+    html += '<table style="width: 100%; border-collapse: collapse; margin-top: 10px;">';
+    html += '<tr style="background-color: #f5f5f5;"><th style="border: 1px solid #ddd; padding: 8px;">アルゴリズム</th><th style="border: 1px solid #ddd; padding: 8px;">結果</th></tr>';
+
+    const algorithmNames = {
+        'bubbleSort': 'バブルソート',
+        'selectionSort': '選択ソート',
+        'insertionSort': '挿入ソート',
+        'quickSort': 'クイックソート',
+        'mergeSort': 'マージソート',
+        'heapSort': 'ヒープソート',
+        'shellSort': 'シェルソート',
+        'bucketSort': 'バケットソート',
+        'radixSort': '基数ソート'
+    };
+
+    for (const algo of selectedAlgorithms) {
+        const result = data.results[algo];
+        const resultStr = result.join(', ');
+        html += `<tr><td style="border: 1px solid #ddd; padding: 8px;">${algorithmNames[algo]}</td><td style="border: 1px solid #ddd; padding: 8px;">[${resultStr}]</td></tr>`;
+    }
+
+    html += '</table>';
+
+    compareResult.innerHTML = html;
+}
 
 // ページロード時に初期化
 document.addEventListener('DOMContentLoaded', init);
