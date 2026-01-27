@@ -17,15 +17,15 @@
     <h1 class="title">ソートアルゴリズム学習ツール</h1>
     <div class="top-container">
         <div class="visual-area">
-            <p>アルゴリズムの可視化</p>
+            <h2 class="panel-header">アルゴリズムの可視化</h2>
         </div>
         <div class="control-panel">
-            <p>コントロールパネル</p>
+            <h2 class="panel-header">コントロールパネル</h2>
         </div>
     </div>
 
     <div class="description">
-        <h2>アルゴリズムの説明</h2>
+        <h2 class="panel-header">アルゴリズムの説明</h2>
         <select id="mySelect" onchange="changeAlg()">
             <option value="0">選択してください</option>
             <option value="1">アルゴリズム1</option>
@@ -34,8 +34,40 @@
         <div id="contentArea"></div>
     </div>
 
-    <div class="comparison">
-        <p>アルゴリズムの比較</p>
+    <div class="container">
+        <header>
+            <h1>アルゴリズム実装</h1>
+        </header>
+        <div class="content">
+            <div>
+                <div class="section">
+                    <h2>エディター</h2>
+                    <textarea id="userCode" placeholder="ここにコードを入力してください..."></textarea>
+                    <button onclick="executeCode()">実行</button>
+                    <div id="error" class="error" style="display:none;"></div>
+                </div>
+            </div>
+            <div>
+                <div class="section">
+                    <h2>実行結果</h2>
+                    <div id="result" class="result-box">実行結果がここに表示されます</div>
+                </div>
+                <div class="section">
+                    <h2>答え比較</h2>
+                    <div class="comparison">
+                        <div class="comparison-item">
+                            <h3>あなたの答え</h3>
+                            <div id="yourAnswer" class="comparison-box">-</div>
+                        </div>
+                        <div class="comparison-item">
+                            <h3>正解</h3>
+                            <div id="correctAnswer" class="comparison-box">-</div>
+                        </div>
+                    </div>
+                    <div id="status"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script th:src="@{/js/script.js}"></script>
