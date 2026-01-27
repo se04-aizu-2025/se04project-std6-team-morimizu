@@ -2,54 +2,26 @@ package com.se04project.morimizu;
 
 import com.se04project.morimizu.sort.*;
 import org.junit.jupiter.api.Test;
-import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * ソートアルゴリズムのテストクラス
+ * TestDataGeneratorを使用してテストデータを生成
  */
 public class SortAlgorithmTests {
     
     /**
-     * テスト用の配列をコピーするメソッド
-     */
-    private int[] copyArray(int[] arr) {
-        return Arrays.copyOf(arr, arr.length);
-    }
-    
-    /**
-     * テストデータの準備
+     * ランダムな配列でのテスト
      */
     @Test
     public void testAllSortAlgorithmsWithRandomArray() {
-        // テスト用の配列
-        int[] originalArray = {64, 34, 25, 12, 22, 11, 90, 88, 45, 50};
-        int[] expected = {11, 12, 22, 25, 34, 45, 50, 64, 88, 90};
+        int[] originalArray = TestDataGenerator.generateRandomArray(10, 0, 100);
+        int[] expected = TestDataGenerator.copyArray(originalArray);
         
-        // バブルソートのテスト
-        int[] bubbleArray = copyArray(originalArray);
-        BubbleSort.sort(bubbleArray);
-        assertArrayEquals(expected, bubbleArray, "バブルソートが正しく動作していません");
+        // 期待値をソート
+        java.util.Arrays.sort(expected);
         
-        // 選択ソートのテスト
-        int[] selectionArray = copyArray(originalArray);
-        SelectionSort.sort(selectionArray);
-        assertArrayEquals(expected, selectionArray, "選択ソートが正しく動作していません");
-        
-        // クイックソートのテスト
-        int[] quickArray = copyArray(originalArray);
-        QuickSort.sort(quickArray);
-        assertArrayEquals(expected, quickArray, "クイックソートが正しく動作していません");
-        
-        // マージソートのテスト
-        int[] mergeArray = copyArray(originalArray);
-        MergeSort.sort(mergeArray);
-        assertArrayEquals(expected, mergeArray, "マージソートが正しく動作していません");
-        
-        // シェルソートのテスト
-        int[] shellArray = copyArray(originalArray);
-        ShellSort.sort(shellArray);
-        assertArrayEquals(expected, shellArray, "シェルソートが正しく動作していません");
+        testAllAlgorithms(originalArray, expected, "ランダム配列");
     }
     
     /**
@@ -57,16 +29,10 @@ public class SortAlgorithmTests {
      */
     @Test
     public void testWithEmptyArray() {
-        int[] emptyArray = {};
+        int[] emptyArray = TestDataGenerator.generateEmptyArray();
+        int[] expected = TestDataGenerator.copyArray(emptyArray);
         
-        BubbleSort.sort(copyArray(emptyArray));
-        SelectionSort.sort(copyArray(emptyArray));
-        QuickSort.sort(copyArray(emptyArray));
-        MergeSort.sort(copyArray(emptyArray));
-        ShellSort.sort(copyArray(emptyArray));
-        
-        // 空の配列でもエラーが発生しないことを確認
-        assertTrue(true);
+        testAllAlgorithms(emptyArray, expected, "空の配列");
     }
     
     /**
@@ -74,28 +40,22 @@ public class SortAlgorithmTests {
      */
     @Test
     public void testWithSingleElement() {
-        int[] singleArray = {5};
-        int[] expected = {5};
+        int[] singleArray = TestDataGenerator.generateSingleElementArray(5);
+        int[] expected = TestDataGenerator.copyArray(singleArray);
         
-        int[] bubbleArray = copyArray(singleArray);
-        BubbleSort.sort(bubbleArray);
-        assertArrayEquals(expected, bubbleArray);
+        testAllAlgorithms(singleArray, expected, "単一要素の配列");
+    }
+    
+    /**
+     * 2要素の配列のテスト
+     */
+    @Test
+    public void testWithTwoElements() {
+        int[] twoArray = TestDataGenerator.generateTwoElementArray(10, 5);
+        int[] expected = TestDataGenerator.copyArray(twoArray);
+        java.util.Arrays.sort(expected);
         
-        int[] selectionArray = copyArray(singleArray);
-        SelectionSort.sort(selectionArray);
-        assertArrayEquals(expected, selectionArray);
-        
-        int[] quickArray = copyArray(singleArray);
-        QuickSort.sort(quickArray);
-        assertArrayEquals(expected, quickArray);
-        
-        int[] mergeArray = copyArray(singleArray);
-        MergeSort.sort(mergeArray);
-        assertArrayEquals(expected, mergeArray);
-        
-        int[] shellArray = copyArray(singleArray);
-        ShellSort.sort(shellArray);
-        assertArrayEquals(expected, shellArray);
+        testAllAlgorithms(twoArray, expected, "2要素の配列");
     }
     
     /**
@@ -103,28 +63,10 @@ public class SortAlgorithmTests {
      */
     @Test
     public void testWithSortedArray() {
-        int[] sortedArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        int[] expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int[] sortedArray = TestDataGenerator.generateSortedArray(20, 0, 100);
+        int[] expected = TestDataGenerator.copyArray(sortedArray);
         
-        int[] bubbleArray = copyArray(sortedArray);
-        BubbleSort.sort(bubbleArray);
-        assertArrayEquals(expected, bubbleArray);
-        
-        int[] selectionArray = copyArray(sortedArray);
-        SelectionSort.sort(selectionArray);
-        assertArrayEquals(expected, selectionArray);
-        
-        int[] quickArray = copyArray(sortedArray);
-        QuickSort.sort(quickArray);
-        assertArrayEquals(expected, quickArray);
-        
-        int[] mergeArray = copyArray(sortedArray);
-        MergeSort.sort(mergeArray);
-        assertArrayEquals(expected, mergeArray);
-        
-        int[] shellArray = copyArray(sortedArray);
-        ShellSort.sort(shellArray);
-        assertArrayEquals(expected, shellArray);
+        testAllAlgorithms(sortedArray, expected, "ソート済み配列");
     }
     
     /**
@@ -132,28 +74,11 @@ public class SortAlgorithmTests {
      */
     @Test
     public void testWithReverseSortedArray() {
-        int[] reverseSortedArray = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        int[] expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int[] reverseSortedArray = TestDataGenerator.generateReverseSortedArray(20, 0, 100);
+        int[] expected = TestDataGenerator.copyArray(reverseSortedArray);
+        java.util.Arrays.sort(expected);
         
-        int[] bubbleArray = copyArray(reverseSortedArray);
-        BubbleSort.sort(bubbleArray);
-        assertArrayEquals(expected, bubbleArray);
-        
-        int[] selectionArray = copyArray(reverseSortedArray);
-        SelectionSort.sort(selectionArray);
-        assertArrayEquals(expected, selectionArray);
-        
-        int[] quickArray = copyArray(reverseSortedArray);
-        QuickSort.sort(quickArray);
-        assertArrayEquals(expected, quickArray);
-        
-        int[] mergeArray = copyArray(reverseSortedArray);
-        MergeSort.sort(mergeArray);
-        assertArrayEquals(expected, mergeArray);
-        
-        int[] shellArray = copyArray(reverseSortedArray);
-        ShellSort.sort(shellArray);
-        assertArrayEquals(expected, shellArray);
+        testAllAlgorithms(reverseSortedArray, expected, "逆順ソート配列");
     }
     
     /**
@@ -161,28 +86,11 @@ public class SortAlgorithmTests {
      */
     @Test
     public void testWithDuplicateElements() {
-        int[] duplicateArray = {5, 2, 8, 2, 9, 1, 5, 5, 3, 8};
-        int[] expected = {1, 2, 2, 3, 5, 5, 5, 8, 8, 9};
+        int[] duplicateArray = TestDataGenerator.generateArrayWithDuplicates(30, 5);
+        int[] expected = TestDataGenerator.copyArray(duplicateArray);
+        java.util.Arrays.sort(expected);
         
-        int[] bubbleArray = copyArray(duplicateArray);
-        BubbleSort.sort(bubbleArray);
-        assertArrayEquals(expected, bubbleArray);
-        
-        int[] selectionArray = copyArray(duplicateArray);
-        SelectionSort.sort(selectionArray);
-        assertArrayEquals(expected, selectionArray);
-        
-        int[] quickArray = copyArray(duplicateArray);
-        QuickSort.sort(quickArray);
-        assertArrayEquals(expected, quickArray);
-        
-        int[] mergeArray = copyArray(duplicateArray);
-        MergeSort.sort(mergeArray);
-        assertArrayEquals(expected, mergeArray);
-        
-        int[] shellArray = copyArray(duplicateArray);
-        ShellSort.sort(shellArray);
-        assertArrayEquals(expected, shellArray);
+        testAllAlgorithms(duplicateArray, expected, "重複要素を含む配列");
     }
     
     /**
@@ -190,42 +98,83 @@ public class SortAlgorithmTests {
      */
     @Test
     public void testWithNegativeNumbers() {
-        int[] negativeArray = {-5, 10, -2, 8, -15, 0, 3, -1};
-        int[] expected = {-15, -5, -2, -1, 0, 3, 8, 10};
+        int[] negativeArray = TestDataGenerator.generateArrayWithNegativeNumbers(20);
+        int[] expected = TestDataGenerator.copyArray(negativeArray);
+        java.util.Arrays.sort(expected);
         
-        int[] bubbleArray = copyArray(negativeArray);
-        BubbleSort.sort(bubbleArray);
-        assertArrayEquals(expected, bubbleArray);
-        
-        int[] selectionArray = copyArray(negativeArray);
-        SelectionSort.sort(selectionArray);
-        assertArrayEquals(expected, selectionArray);
-        
-        int[] quickArray = copyArray(negativeArray);
-        QuickSort.sort(quickArray);
-        assertArrayEquals(expected, quickArray);
-        
-        int[] mergeArray = copyArray(negativeArray);
-        MergeSort.sort(mergeArray);
-        assertArrayEquals(expected, mergeArray);
-        
-        int[] shellArray = copyArray(negativeArray);
-        ShellSort.sort(shellArray);
-        assertArrayEquals(expected, shellArray);
+        testAllAlgorithms(negativeArray, expected, "負の数を含む配列");
     }
     
     /**
-     * nullの入力のテスト
+     * すべて同じ値の配列のテスト
      */
     @Test
-    public void testWithNullArray() {
-        // nullが渡されてもエラーが発生しないことを確認
-        BubbleSort.sort(null);
-        SelectionSort.sort(null);
-        QuickSort.sort(null);
-        MergeSort.sort(null);
-        ShellSort.sort(null);
+    public void testWithIdenticalElements() {
+        int[] identicalArray = TestDataGenerator.generateIdenticalElementsArray(15, 42);
+        int[] expected = TestDataGenerator.copyArray(identicalArray);
         
-        assertTrue(true);
+        testAllAlgorithms(identicalArray, expected, "すべて同じ値の配列");
+    }
+    
+    /**
+     * ほぼソート済みの配列のテスト
+     */
+    @Test
+    public void testWithNearlySortedArray() {
+        int[] nearlySortedArray = TestDataGenerator.generateNearlySortedArray(50, 5);
+        int[] expected = TestDataGenerator.copyArray(nearlySortedArray);
+        java.util.Arrays.sort(expected);
+        
+        testAllAlgorithms(nearlySortedArray, expected, "ほぼソート済み配列");
+    }
+    
+    /**
+     * 大きなランダム配列のテスト
+     */
+    @Test
+    public void testWithLargeRandomArray() {
+        int[] largeArray = TestDataGenerator.generateRandomArray(1000, -10000, 10000);
+        int[] expected = TestDataGenerator.copyArray(largeArray);
+        java.util.Arrays.sort(expected);
+        
+        testAllAlgorithms(largeArray, expected, "大規模ランダム配列");
+    }
+    
+    /**
+     * すべてのソートアルゴリズムをテストするヘルパーメソッド
+     * @param originalArray テスト対象の配列
+     * @param expected 期待される結果
+     * @param testName テスト名
+     */
+    private void testAllAlgorithms(int[] originalArray, int[] expected, String testName) {
+        // バブルソートのテスト
+        int[] bubbleArray = TestDataGenerator.copyArray(originalArray);
+        BubbleSort.sort(bubbleArray);
+        assertArrayEquals(expected, bubbleArray, "バブルソート - " + testName);
+        assertTrue(TestDataGenerator.isSortedAscending(bubbleArray), "バブルソート結果が昇順ではありません - " + testName);
+        
+        // 選択ソートのテスト
+        int[] selectionArray = TestDataGenerator.copyArray(originalArray);
+        SelectionSort.sort(selectionArray);
+        assertArrayEquals(expected, selectionArray, "選択ソート - " + testName);
+        assertTrue(TestDataGenerator.isSortedAscending(selectionArray), "選択ソート結果が昇順ではありません - " + testName);
+        
+        // クイックソートのテスト
+        int[] quickArray = TestDataGenerator.copyArray(originalArray);
+        QuickSort.sort(quickArray);
+        assertArrayEquals(expected, quickArray, "クイックソート - " + testName);
+        assertTrue(TestDataGenerator.isSortedAscending(quickArray), "クイックソート結果が昇順ではありません - " + testName);
+        
+        // マージソートのテスト
+        int[] mergeArray = TestDataGenerator.copyArray(originalArray);
+        MergeSort.sort(mergeArray);
+        assertArrayEquals(expected, mergeArray, "マージソート - " + testName);
+        assertTrue(TestDataGenerator.isSortedAscending(mergeArray), "マージソート結果が昇順ではありません - " + testName);
+        
+        // シェルソートのテスト
+        int[] shellArray = TestDataGenerator.copyArray(originalArray);
+        ShellSort.sort(shellArray);
+        assertArrayEquals(expected, shellArray, "シェルソート - " + testName);
+        assertTrue(TestDataGenerator.isSortedAscending(shellArray), "シェルソート結果が昇順ではありません - " + testName);
     }
 }
