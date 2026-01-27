@@ -251,7 +251,7 @@ function drawChart(array, highlightIndices = []) {
 
     const maxValue = Math.max(...array);
     const maxHeight = 250; // ピクセル
-    
+
     // 数列の長さに応じてバーの幅を調整
     // 最大30個の場合を想定して、コンテナ幅に合わせて調整
     const containerWidth = chartContainer.offsetWidth - 20; // パディングを除く
@@ -343,9 +343,8 @@ function updateProgressInfo() {
 }
 
 // 説明表示用の関数（既存）
-function changeAlg() {
-    const select = document.getElementById("mySelect");
-    const selectedValue = select.value;
+function changeAlg(element, targetId) {
+    const selectedValue = element.value;
 
     const contentArea = document.getElementById(targetId);
 
