@@ -24,7 +24,7 @@
         <!-- コントロールパネル -->
         <div class="control-panel">
             <h2>コントロールパネル</h2>
-            
+
             <!-- ソート対象数列入力 -->
             <div class="control-group">
                 <label for="arrayInput">数列入力 (スペース区切り):</label>
@@ -106,8 +106,48 @@
             <div>
                 <div class="section">
                     <h2>エディター</h2>
-                    <textarea id="userCode" placeholder="ここにコードを入力してください..."></textarea>
-                    <button onclick="executeCode()">実行</button>
+
+                    <textarea id="userCode"
+                        placeholder="Javaコードを入力してください&#10;&#10;例:&#10;for (int i = 0; i < arr.length - 1; i++) {&#10;    for (int j = 0; j < arr.length - 1 - i; j++) {&#10;        if (arr[j] > arr[j + 1]) {&#10;            int temp = arr[j];&#10;            arr[j] = arr[j + 1];&#10;            arr[j + 1] = temp;&#10;        }&#10;    }&#10;}"></textarea>
+
+                    <!-- テスト設定エリア -->
+                    <div style="margin-top: 15px; padding: 10px; background-color: #f5f5f5; border-radius: 5px;">
+                        <h3 style="margin-top: 0;">テスト設定</h3>
+
+                        <!-- テストするアルゴリズム選択 -->
+                        <div style="margin-bottom: 10px;">
+                            <label for="testAlgorithm">テストするアルゴリズム:</label>
+                            <select id="testAlgorithm">
+                                <option value="">選択してください</option>
+                                <option value="bubbleSort">バブルソート</option>
+                                <option value="selectionSort">選択ソート</option>
+                                <option value="insertionSort">挿入ソート</option>
+                                <option value="quickSort">クイックソート</option>
+                                <option value="mergeSort">マージソート</option>
+                                <option value="heapSort">ヒープソート</option>
+                                <option value="shellSort">シェルソート</option>
+                                <option value="bucketSort">バケットソート</option>
+                                <option value="radixSort">基数ソート</option>
+                            </select>
+                        </div>
+
+                        <!-- テストデータ配列サイズ -->
+                        <div style="margin-bottom: 10px;">
+                            <label for="testArraySize">テストデータサイズ:</label>
+                            <input type="number" id="testArraySize" min="1" max="100" value="10" style="width: 60px;" />
+                        </div>
+                        <!-- テストデータ表示 -->
+                        <div style="margin-top: 10px;">
+                            <div id="testData"
+                                style="padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 3px; min-height: 40px;">
+                                テストデータはここに表示されます</div>
+                        </div>
+
+                        <!-- テストデータ生成と実行 -->
+                        <div>
+                            <button onclick="generateAndTest()" class="btn btn-primary">テストデータ生成して実行</button>
+                        </div>
+                    </div>
                     <div id="error" class="error" style="display:none;"></div>
                 </div>
             </div>
@@ -124,11 +164,17 @@
                             <div id="yourAnswer" class="comparison-box">-</div>
                         </div>
                         <div class="comparison-item">
-                            <h3>正解</h3>
+                            <h3>正解
+
+                            </h3>
                             <div id="correctAnswer" class="comparison-box">-</div>
                         </div>
                     </div>
-                    <div id="status"></div>
+                    <div id="status"
+                        style="margin-top: 15px; padding: 10px; border-radius: 5px; font-weight: bold; text-align: center;">
+                    </div>
+                    <div id="testResults"
+                        style="margin-top: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px;"></div>
                 </div>
             </div>
         </div>
