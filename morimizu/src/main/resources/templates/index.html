@@ -17,10 +17,10 @@
     <h1 class="title">ソートアルゴリズム学習ツール</h1>
     <div class="top-container">
         <div class="visual-area">
-            <p>アルゴリズムの可視化</p>
+            <h2 class="panel-header">アルゴリズムの可視化</h2>
         </div>
         <div class="control-panel">
-            <p>コントロールパネル</p>
+            <h2 class="panel-header">コントロールパネル</h2>
         </div>
     </div>
 
@@ -41,36 +41,39 @@
         <div id="contentArea"></div>
     </div>
 
-    <div class="comparison">
-        <h2>アルゴリズムの比較</h2>
-        <div>
-            <select id="mySelect2" onchange="changeAlg(this, 'contentArea2')">
-                <option value="Default">選択してください</option>
-                <option value="BubbleSort">バブルソート</option>
-                <option value="BucketSort">バケットソート</option>
-                <option value="HeapSort">ヒープソート</option>
-                <option value="InsertionSort">挿入ソート</option>
-                <option value="MergeSort">マージソート</option>
-                <option value="QuickSort">クイックソート</option>
-                <option value="RadixSort">基数ソート</option>
-                <option value="SelectionSort">選択ソート</option>
-                <option value="ShellSort">シェルソート</option>
-            </select>
-            <div id="contentArea2"></div>
-
-            <select id="mySelect3" onchange="changeAlg(this, 'contentArea3')">
-                <option value="Default">選択してください</option>
-                <option value="BubbleSort">バブルソート</option>
-                <option value="BucketSort">バケットソート</option>
-                <option value="HeapSort">ヒープソート</option>
-                <option value="InsertionSort">挿入ソート</option>
-                <option value="MergeSort">マージソート</option>
-                <option value="QuickSort">クイックソート</option>
-                <option value="RadixSort">基数ソート</option>
-                <option value="SelectionSort">選択ソート</option>
-                <option value="ShellSort">シェルソート</option>
-            </select>
-            <div id="contentArea3"></div>
+    <div class="container">
+        <header>
+            <h1>アルゴリズム実装</h1>
+        </header>
+        <div class="content">
+            <div>
+                <div class="section">
+                    <h2>エディター</h2>
+                    <textarea id="userCode" placeholder="ここにコードを入力してください..."></textarea>
+                    <button onclick="executeCode()">実行</button>
+                    <div id="error" class="error" style="display:none;"></div>
+                </div>
+            </div>
+            <div>
+                <div class="section">
+                    <h2>実行結果</h2>
+                    <div id="result" class="result-box">実行結果がここに表示されます</div>
+                </div>
+                <div class="section">
+                    <h2>答え比較</h2>
+                    <div class="comparison">
+                        <div class="comparison-item">
+                            <h3>あなたの答え</h3>
+                            <div id="yourAnswer" class="comparison-box">-</div>
+                        </div>
+                        <div class="comparison-item">
+                            <h3>正解</h3>
+                            <div id="correctAnswer" class="comparison-box">-</div>
+                        </div>
+                    </div>
+                    <div id="status"></div>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -11,6 +11,32 @@ function changeAlg(element, targetId) {
     }
 };
 
+function executeCode() {
+    const userCode = document.getElementById('userCode').value;
+    const errorDiv = document.getElementById('error');
+    const resultDiv = document.getElementById('result');
+
+    errorDiv.style.display = 'none';
+
+    try {
+        const userResult = eval('(function() { ' + userCode + ' })()');
+        resultDiv.textContent = JSON.stringify(userResult, null, 2);
+        document.getElementById('yourAnswer').textContent = JSON.stringify(userResult, null, 2);
+
+        compareResults(userResult);
+    } catch (error) {
+        errorDiv.textContent = 'エラー: ' + error.message;
+        errorDiv.style.display = 'block';
+    }
+}
+
+function compareResults(userResult) {
+    const statusDiv = document.getElementById('status');
+    if (userResult) {
+        statusDiv.innerHTML = '<div class="success">実装完了</div>';
+    }
+}
+
 const algData = {
     "Default": `
         <p>学びたいアルゴリズムを選択してください。</p>
