@@ -15,87 +15,91 @@
 
 <body>
     <h1 class="title">ソートアルゴリズム学習ツール</h1>
+    
     <div class="top-container">
-        <!-- 可視化エリア -->
-        <div class="visual-area">
-            <h2>可視化</h2>
-            <div id="chartContainer" class="chart-container"></div>
+        <div class="container-style visual-area">
+            <header>
+                <h2>ソート画面</h2>
+            </header>
+            <div class="card-content">
+                <div id="chartContainer" class="chart-container"></div>
+            </div>
         </div>
-        <!-- コントロールパネル -->
-        <div class="control-panel">
-            <h2>コントロールパネル</h2>
-            
-            <!-- ソート対象数列入力 -->
-            <div class="control-group">
-                <label for="arrayInput">数列入力 (スペース区切り):</label>
-                <input type="text" id="arrayInput" placeholder="例: 5 2 8 1 9" />
-            </div>
 
-            <!-- ソート順選択 -->
-            <div class="control-group">
-                <label for="sortOrder">ソート順:</label>
-                <select id="sortOrder">
-                    <option value="">選択してください</option>
-                    <option value="asc">昇順</option>
-                    <option value="desc">降順</option>
-                </select>
-            </div>
+        <div class="container-style control-panel">
+            <header>
+                <h2>アルゴリズム操作パネル</h2>
+            </header>
+            <div class="card-content">
+                <div class="control-group">
+                    <label for="arrayInput">数列入力 (スペース区切り):</label>
+                    <input type="text" id="arrayInput" placeholder="例: 5 2 8 1 9" />
+                </div>
 
-            <!-- アルゴリズム選択 -->
-            <div class="control-group">
-                <label for="algorithmSelect">アルゴリズム:</label>
-                <select id="algorithmSelect">
-                    <option value="">選択してください</option>
-                    <option value="bubbleSort">バブルソート</option>
-                    <option value="selectionSort">選択ソート</option>
-                    <option value="insertionSort">挿入ソート</option>
-                    <option value="quickSort">クイックソート</option>
-                    <option value="mergeSort">マージソート</option>
-                    <option value="heapSort">ヒープソート</option>
-                    <option value="shellSort">シェルソート</option>
-                    <option value="bucketSort">バケットソート</option>
-                    <option value="radixSort">基数ソート</option>
-                </select>
-            </div>
+                <div class="control-group">
+                    <label for="sortOrder">ソート順:</label>
+                    <select id="sortOrder">
+                        <option value="">選択してください</option>
+                        <option value="asc">昇順</option>
+                        <option value="desc">降順</option>
+                    </select>
+                </div>
 
-            <!-- 実行・終了ボタン -->
-            <div class="control-group button-group">
-                <button id="startBtn" class="btn btn-primary">実行</button>
-                <button id="stopBtn" class="btn btn-danger" disabled>実行終了</button>
-            </div>
+                <div class="control-group">
+                    <label for="algorithmSelect">アルゴリズム:</label>
+                    <select id="algorithmSelect">
+                        <option value="">選択してください</option>
+                        <option value="bubbleSort">バブルソート</option>
+                        <option value="selectionSort">選択ソート</option>
+                        <option value="insertionSort">挿入ソート</option>
+                        <option value="quickSort">クイックソート</option>
+                        <option value="mergeSort">マージソート</option>
+                        <option value="heapSort">ヒープソート</option>
+                        <option value="shellSort">シェルソート</option>
+                        <option value="bucketSort">バケットソート</option>
+                        <option value="radixSort">基数ソート</option>
+                    </select>
+                </div>
 
-            <!-- 実行制御ボタン -->
-            <div class="control-group button-group">
-                <button id="playBtn" class="btn btn-control" disabled>自動再生 ▶</button>
-                <button id="pauseBtn" class="btn btn-control btn-active">停止 ⏸</button>
-                <button id="resetBtn" class="btn btn-control" disabled>最初へ ⏮</button>
-                <button id="endBtn" class="btn btn-control" disabled>最後へ ⏭</button>
-                <button id="nextBtn" class="btn btn-control" disabled>1ステップ先へ ➤</button>
-            </div>
+                <div class="control-group button-group">
+                    <button id="startBtn" class="btn btn-primary">実行</button>
+                    <button id="stopBtn" class="btn btn-danger" disabled>実行終了</button>
+                </div>
 
-            <!-- 進捗表示 -->
-            <div class="control-group">
-                <div id="progressInfo"></div>
+                <div class="control-group button-group">
+                    <button id="playBtn" class="btn btn-control" disabled>自動再生 ▶</button>
+                    <button id="pauseBtn" class="btn btn-control btn-active">停止 ⏸</button>
+                    <button id="resetBtn" class="btn btn-control" disabled>最初へ ⏮</button>
+                    <button id="endBtn" class="btn btn-control" disabled>最後へ ⏭</button>
+                    <button id="nextBtn" class="btn btn-control" disabled>1ステップ先へ ➤</button>
+                </div>
+
+                <div class="control-group">
+                    <div id="progressInfo"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- アルゴリズム説明セクション -->
-    <div class="description">
-        <h2>アルゴリズムの説明</h2>
-        <select id="mySelect" onchange="changeAlg(this, 'contentArea')">
-            <option value="Default">選択してください</option>
-            <option value="BubbleSort">バブルソート</option>
-            <option value="BucketSort">バケットソート</option>
-            <option value="HeapSort">ヒープソート</option>
-            <option value="InsertionSort">挿入ソート</option>
-            <option value="MergeSort">マージソート</option>
-            <option value="QuickSort">クイックソート</option>
-            <option value="RadixSort">基数ソート</option>
-            <option value="SelectionSort">選択ソート</option>
-            <option value="ShellSort">シェルソート</option>
-        </select>
-        <div id="contentArea"></div>
+    <div class="description container-style">
+        <header>
+            <h2>アルゴリズムの説明</h2>
+        </header>
+        <div class="card-content">
+            <select id="mySelect" onchange="changeAlg(this, 'contentArea')">
+                <option value="Default">選択してください</option>
+                <option value="BubbleSort">バブルソート</option>
+                <option value="BucketSort">バケットソート</option>
+                <option value="HeapSort">ヒープソート</option>
+                <option value="InsertionSort">挿入ソート</option>
+                <option value="MergeSort">マージソート</option>
+                <option value="QuickSort">クイックソート</option>
+                <option value="RadixSort">基数ソート</option>
+                <option value="SelectionSort">選択ソート</option>
+                <option value="ShellSort">シェルソート</option>
+            </select>
+            <div id="contentArea"></div>
+        </div>
     </div>
 
     <div class="container">

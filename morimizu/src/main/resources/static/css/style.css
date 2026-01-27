@@ -13,13 +13,13 @@ body {
 
 .visual-area {
     background-color: white;
-    padding: 20px;
     margin-top: 30px;
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     flex: 1;
     min-width: 400px;
+    overflow: hidden;
 }
 
 .visual-area h2 {
@@ -87,7 +87,6 @@ body {
 
 .control-panel {
     background-color: white;
-    padding: 20px;
     margin-top: 30px;
     margin-bottom: 20px;
     border-radius: 8px;
@@ -96,6 +95,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    overflow: hidden;
 }
 
 .control-panel h2 {
@@ -202,10 +202,8 @@ body {
 
 .description {
     background-color: white;
-    padding: 20px;
-    margin: 30px auto 20px;
-    margin-bottom: 50px;
-    width: 100%;
+    margin: 30px auto 50px;
+    max-width: 1200px;     
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: 'Roboto Mono', monospace;
@@ -246,6 +244,8 @@ body {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 @media (max-width: 1200px) {
@@ -275,29 +275,31 @@ body {
     padding: 20px;
 }
 
-.container {
+.container,
+.container-style {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 30px auto;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    overflow: hidden; /* ヘッダーの角を丸めるために必要 */
 }
 
-header {
+.container header,
+.container-style header {
     background: #0066cc;
     color: white;
-    padding: 20px;
+    padding: 15px 20px;
 }
 
-header h1 {
-    font-size: 24px;
+.container header h1,
+.container-style header h2 {
+    margin: 0;
+    font-size: 20px;
 }
 
-.content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+.content,
+.card-content {
     padding: 20px;
 }
 
