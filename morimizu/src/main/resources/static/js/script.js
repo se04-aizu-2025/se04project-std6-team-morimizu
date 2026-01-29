@@ -82,12 +82,46 @@ function getCurrentArray() {
 
 // ソート開始
 async function startSort() {
-    const array = parseArrayInput();
+    let array = parseArrayInput();
     const order = sortOrder.value;
     const algorithm = algorithmSelect.value;
 
-    if (!array.length || !order || !algorithm) {
-        alert('数列、ソート順、アルゴリズムをすべて選択してください');
+    // 入力欄が空の場合、テストデータを自動生成
+    if (!array.length) {
+        try {
+            const generateResponse = await fetch('/api/generate-test-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    dataType: 'random',
+                    size: 10
+                })
+            });
+
+            if (!generateResponse.ok) {
+                throw new Error('テストデータ生成エラー');
+            }
+
+            const generateData = await generateResponse.json();
+
+            if (!generateData.success) {
+                throw new Error(generateData.error);
+            }
+
+            array = generateData.data;
+            // 生成されたデータを表示
+            arrayInput.value = array.join(' ');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('テストデータ生成エラー: ' + error.message);
+            return;
+        }
+    }
+
+    if (!order || !algorithm) {
+        alert('ソート順とアルゴリズムを選択してください');
         return;
     }
 
@@ -292,8 +326,8 @@ function updateControlPanel() {
     const hasOrder = sortOrder.value !== '';
     const hasAlgorithm = algorithmSelect.value !== '';
 
-    // 実行ボタン：入力値と選択があり、実行中でないときのみ有効
-    startBtn.disabled = !hasInput || !hasOrder || !hasAlgorithm || sortState.isRunning;
+    // 実行ボタン：入力がなくても大丈夫（自動生成される）。ソート順とアルゴリズムがあり、実行中でないときのみ有効
+    startBtn.disabled = !hasOrder || !hasAlgorithm || sortState.isRunning;
 
     // 実行終了ボタン：実行中のときのみ有効
     stopBtn.disabled = !sortState.isRunning;
@@ -483,6 +517,7 @@ async function compileAndTestJava() {
 async function generateAndTest() {
     const testAlgorithm = document.getElementById('testAlgorithm').value;
     const testArraySize = parseInt(document.getElementById('testArraySize').value);
+    const testDataType = document.getElementById('testDataType') ? document.getElementById('testDataType').value : 'random';
     const errorDiv = document.getElementById('error');
     const statusDiv = document.getElementById('status');
     const testResultsDiv = document.getElementById('testResults');
@@ -498,56 +533,83 @@ async function generateAndTest() {
         return;
     }
 
-    // ランダムテストデータを生成
-    const testData = generateRandomArray(testArraySize);
-    displayTestData(testData);
-
-    // ユーザーコードを実行
-    const userCode = document.getElementById('userCode').value;
-
-    if (!userCode.trim()) {
-        alert('ユーザーコードを入力してください');
-        return;
-    }
-
+    // TestDataGeneratorを使用してテストデータを生成
     try {
-        errorDiv.style.display = 'none';
-
-        // バックエンドでJavaコードを実行
-        const response = await fetch('/api/execute-java-code', {
+        const generateResponse = await fetch('/api/generate-test-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                javaCode: userCode,
-                array: testData
+                dataType: testDataType,
+                size: testArraySize
             })
         });
 
-        if (!response.ok) {
-            throw new Error('ユーザーコード実行リクエスト失敗');
+        if (!generateResponse.ok) {
+            throw new Error('テストデータ生成エラー');
         }
 
-        const data = await response.json();
+        const generateData = await generateResponse.json();
 
-        if (!data.success) {
-            errorDiv.textContent = 'ユーザーコードのエラー: ' + data.error;
-            errorDiv.style.display = 'block';
-            testResultsDiv.innerHTML = '<p style="color: red;">ユーザーコード実行エラー</p>';
+        if (!generateData.success) {
+            alert('テストデータ生成失敗: ' + generateData.error);
             return;
         }
 
-        const userResult = data.result;
-        document.getElementById('yourAnswer').textContent = JSON.stringify(userResult, null, 2);
-        document.getElementById('result').textContent = JSON.stringify(userResult, null, 2);
+        const testData = generateData.data;
+        displayTestData(testData);
 
-        // バックエンドの実装結果を取得して比較
-        fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv);
+        // ユーザーコードを実行
+        const userCode = document.getElementById('userCode').value;
+
+        if (!userCode.trim()) {
+            alert('ユーザーコードを入力してください');
+            return;
+        }
+
+        try {
+            errorDiv.style.display = 'none';
+
+            // バックエンドでJavaコードを実行
+            const response = await fetch('/api/execute-java-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    javaCode: userCode,
+                    array: testData
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('ユーザーコード実行リクエスト失敗');
+            }
+
+            const data = await response.json();
+
+            if (!data.success) {
+                errorDiv.textContent = 'ユーザーコードのエラー: ' + data.error;
+                errorDiv.style.display = 'block';
+                testResultsDiv.innerHTML = '<p style="color: red;">ユーザーコード実行エラー</p>';
+                return;
+            }
+
+            const userResult = data.result;
+            document.getElementById('yourAnswer').textContent = JSON.stringify(userResult, null, 2);
+            document.getElementById('result').textContent = JSON.stringify(userResult, null, 2);
+
+            // バックエンドの実装結果を取得して比較
+            fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv);
+        } catch (error) {
+            errorDiv.textContent = 'ユーザーコードのエラー: ' + error.message;
+            errorDiv.style.display = 'block';
+            testResultsDiv.innerHTML = '<p style="color: red;">ユーザーコード実行エラー</p>';
+        }
     } catch (error) {
-        errorDiv.textContent = 'ユーザーコードのエラー: ' + error.message;
-        errorDiv.style.display = 'block';
-        testResultsDiv.innerHTML = '<p style="color: red;">ユーザーコード実行エラー</p>';
+        console.error('Error:', error);
+        alert('エラーが発生しました: ' + error.message);
     }
 }
 

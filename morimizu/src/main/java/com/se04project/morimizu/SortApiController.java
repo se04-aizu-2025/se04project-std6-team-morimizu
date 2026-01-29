@@ -92,4 +92,67 @@ public class SortApiController {
 
         return response;
     }
+
+    /**
+     * TestDataGeneratorを使用してテストデータを生成
+     * 
+     * @param request - dataType（生成するデータのタイプ）、size（配列サイズ）を含むリクエスト
+     * @return 生成されたテストデータ
+     */
+    @PostMapping("/generate-test-data")
+    public Map<String, Object> generateTestData(@RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            String dataType = (String) request.get("dataType");
+            Integer size = ((Number) request.get("size")).intValue();
+
+            if (size <= 0 || size > 1000) {
+                throw new IllegalArgumentException("サイズは1から1000の間で指定してください");
+            }
+
+            int[] testData = null;
+
+            switch (dataType) {
+                case "random":
+                    testData = TestDataGenerator.generateRandomArray(size);
+                    break;
+                case "sorted":
+                    testData = TestDataGenerator.generateSortedArray(size);
+                    break;
+                case "reverseSorted":
+                    testData = TestDataGenerator.generateReverseSortedArray(size);
+                    break;
+                case "duplicates":
+                    int uniqueElements = Math.max(1, size / 5);
+                    testData = TestDataGenerator.generateArrayWithDuplicates(size, uniqueElements);
+                    break;
+                case "negative":
+                    testData = TestDataGenerator.generateArrayWithNegativeNumbers(size);
+                    break;
+                case "nearlySorted":
+                    int perturbations = Math.max(1, size / 10);
+                    testData = TestDataGenerator.generateNearlySortedArray(size, perturbations);
+                    break;
+                default:
+                    testData = TestDataGenerator.generateRandomArray(size);
+            }
+
+            // 配列をリストに変換
+            List<Integer> result = new ArrayList<>();
+            for (int value : testData) {
+                result.add(value);
+            }
+
+            response.put("success", true);
+            response.put("data", result);
+            response.put("dataType", dataType);
+            response.put("size", size);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", e.getMessage());
+        }
+
+        return response;
+    }
 }
