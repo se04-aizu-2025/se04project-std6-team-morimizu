@@ -508,12 +508,13 @@ async function compileAndTestJava() {
         if (result.success) {
             const userResult = result.userResult;
             const backendResult = result.backendResult;
+            const executionTime = result.executionTime;
 
             document.getElementById('yourAnswer').textContent = JSON.stringify(userResult, null, 2);
             document.getElementById('correctAnswer').textContent = JSON.stringify(backendResult, null, 2);
 
             // 結果を比較
-            compareTestResults(userResult, backendResult, testResultsDiv, statusDiv);
+            compareTestResults(userResult, backendResult, testResultsDiv, statusDiv, executionTime);
         } else {
             errorDiv.textContent = 'コンパイルエラー: ' + result.error;
             errorDiv.style.display = 'block';
@@ -616,11 +617,12 @@ async function generateAndTest() {
             }
 
             const userResult = data.result;
+            const executionTime = data.executionTime;
             document.getElementById('yourAnswer').textContent = JSON.stringify(userResult, null, 2);
             document.getElementById('result').textContent = JSON.stringify(userResult, null, 2);
 
             // バックエンドの実装結果を取得して比較
-            fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv);
+            fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv, executionTime);
         } catch (error) {
             errorDiv.textContent = 'ユーザーコードのエラー: ' + error.message;
             errorDiv.style.display = 'block';
@@ -657,7 +659,7 @@ function displayTestData(testData) {
 /**
  * バックエンドから結果を取得して比較
  */
-async function fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv) {
+async function fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv, executionTime) {
     try {
         // バックエンドAPIを呼び出し
         const response = await fetch('/api/test-algorithm', {
@@ -680,7 +682,7 @@ async function fetchBackendResult(testData, testAlgorithm, userResult, testResul
         document.getElementById('correctAnswer').textContent = JSON.stringify(backendResult, null, 2);
 
         // 結果を比較
-        compareTestResults(userResult, backendResult, testResultsDiv, statusDiv);
+        compareTestResults(userResult, backendResult, testResultsDiv, statusDiv, executionTime);
     } catch (error) {
         console.error('Error:', error);
         testResultsDiv.innerHTML = '<p style="color: red;">バックエンド通信エラー: ' + error.message + '</p>';
@@ -690,11 +692,16 @@ async function fetchBackendResult(testData, testAlgorithm, userResult, testResul
 /**
  * テスト結果を比較
  */
-function compareTestResults(userResult, correctResult, testResultsDiv, statusDiv) {
+function compareTestResults(userResult, correctResult, testResultsDiv, statusDiv, executionTime) {
     const isCorrect = arraysEqual(userResult, correctResult);
+    
+    let timeHtml = '';
+    if (executionTime !== undefined) {
+        timeHtml = `<div style="margin-top: 5px; font-size: 0.9em; color: #333; font-weight: bold;">実行時間: ${executionTime.toFixed(4)} ms</div>`;
+    }
 
     if (isCorrect) {
-        statusDiv.innerHTML = '<div style="background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px;">合格</div>';
+        statusDiv.innerHTML = `<div style="background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px;">合格</div>${timeHtml}`;
         testResultsDiv.innerHTML = '<p style="color: #4CAF50; font-weight: bold;">あなたの実装は正解です！</p>';
     } else {
         statusDiv.innerHTML = '<div style="background-color: #f44336; color: white; padding: 10px; border-radius: 5px;">不合格</div>';
@@ -782,7 +789,7 @@ const algData = {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> データが一様に分布している場合、平均O(n + k)。</li>
+            <li><strong>時間計算量:</strong> データが一様に分布している場合、平均O(n + k)（kはバケツの数）。</li>
             <li><strong>メリット:</strong>
                 <ul>
                     <li>分布が均等であれば、比較ソートの限界 O(n log n) を超える高速化が可能。</li>
@@ -857,7 +864,7 @@ private static void heapify(int[] arr, int n, int i) {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> 平均・最悪 (n<sup>2</sup>)。しかしデータがほぼ整列している場合はO(n)に近づきます。</li>
+            <li><strong>時間計算量:</strong> 平均・最悪 O(n<sup>2</sup>)。しかしデータがほぼ整列している場合はO(n)に近づきます。</li>
             <li><strong>メリット:</strong>
                 <ul>
                     <li>実装が簡単で、小規模データや「ほぼソート済み」のデータに非常に高速。</li>
@@ -907,7 +914,7 @@ private static void merge(int[] arr, int left, int mid, int right) {
             </li>
             <li><strong>デメリット:</strong>
                 <ul>
-                    <li>配列をソートする場合、O(n)の外部メモリが必要になる。</li>
+                    <li>配列をソートする場合、O(n)の追加メモリ領域が必要になる。</li>
                 </ul>
             </li>
         </ul>
@@ -943,7 +950,7 @@ private static int partition(int[] arr, int low, int high) {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> 平均 O(n<sup>2</sup>)。ピボットの選び方が悪いと最悪O(n<sup>2</sup>) になります。</li>
+            <li><strong>時間計算量:</strong> 平均 O(n log n)。ピボットの選び方が悪いと最悪O(n<sup>2</sup>) になります。</li>
             <li><strong>メリット:</strong>
                 <ul>
                     <li>実用上、最も高速なソートの一つであることが多い。</li>
@@ -1052,7 +1059,7 @@ private static void countSort(int[] arr, int exp) {
             <li><strong>時間計算量:</strong> ギャップの選び方に依存し、O(n<sup>1.3</sup>) から O(n<sup>2</sup>) の間。</li>
             <li><strong>メリット:</strong>
                 <ul>
-                    <li>InsertionSortの改良版であり、中規模データまでは比較的高速。</li>
+                    <li>挿入ソートの改良版であり、中規模データまでは比較的高速。</li>
                     <li>メモリ消費が少なく、実装コードも比較的短い。</li>
                 </ul>
             </li>

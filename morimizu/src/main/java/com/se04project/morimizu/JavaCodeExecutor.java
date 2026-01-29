@@ -13,6 +13,19 @@ public class JavaCodeExecutor {
     private static final String CLASS_NAME = "UserSortCode";
 
     /**
+     * 実行結果と実行時間を保持するクラス
+     */
+    public static class ExecutionResult {
+        public List<Integer> result;
+        public double executionTimeMs;
+
+        public ExecutionResult(List<Integer> result, double executionTimeMs) {
+            this.result = result;
+            this.executionTimeMs = executionTimeMs;
+        }
+    }
+
+    /**
      * ユーザーが記述したJavaコードを実行
      * 
      * @param javaCode  ユーザーが記述したコード
@@ -21,7 +34,7 @@ public class JavaCodeExecutor {
      * @return ソート済みの配列
      * @throws Exception 実行時エラー
      */
-    public static List<Integer> executeUserCode(String javaCode, List<Integer> testArray, String algorithm) throws Exception {
+    public static ExecutionResult executeUserCode(String javaCode, List<Integer> testArray, String algorithm) throws Exception {
         // タイムアウト設定
         long startTime = System.currentTimeMillis();
         long timeoutMs = 5000; // 5秒
@@ -34,7 +47,7 @@ public class JavaCodeExecutor {
             compileCode(wrappedCode);
 
             // ロードと実行
-            List<Integer> result = executeCompiledCode(testArray, algorithm);
+            ExecutionResult result = executeCompiledCode(testArray, algorithm);
 
             // タイムアウトチェック
             if (System.currentTimeMillis() - startTime > timeoutMs) {
@@ -142,7 +155,7 @@ public class JavaCodeExecutor {
     /**
      * コンパイルされたクラスを実行
      */
-    private static List<Integer> executeCompiledCode(List<Integer> inputList, String algorithm) throws Exception {
+    private static ExecutionResult executeCompiledCode(List<Integer> inputList, String algorithm) throws Exception {
         try {
             // クラスローダーでクラスをロード
             URLClassLoader classLoader = new URLClassLoader(
@@ -244,6 +257,8 @@ public class JavaCodeExecutor {
                 argument = new ArrayList<>(inputList);
             }
 
+            long startNano = System.nanoTime();
+
             if (methodIsThreeArgs) {
                 // 3引数の場合: (array, 0, size - 1)
                 method.invoke(null, argument, 0, size - 1);
@@ -251,6 +266,9 @@ public class JavaCodeExecutor {
                 // 1引数の場合: (array)
                 method.invoke(null, argument);
             }
+
+            long endNano = System.nanoTime();
+            double executionTimeMs = (endNano - startNano) / 1_000_000.0;
 
             // 結果の取得
             if (paramType == int[].class) {
@@ -262,7 +280,7 @@ public class JavaCodeExecutor {
             }
 
             classLoader.close();
-            return result;
+            return new ExecutionResult(result, executionTimeMs);
         } catch (Exception e) {
             throw new Exception("実行時エラー: " + e.getMessage());
         }

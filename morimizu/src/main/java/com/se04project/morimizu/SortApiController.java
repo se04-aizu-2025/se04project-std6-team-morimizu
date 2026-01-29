@@ -82,9 +82,10 @@ public class SortApiController {
 
         try {
             // ユーザーコードを実行
-            List<Integer> result = JavaCodeExecutor.executeUserCode(request.getJavaCode(), request.getArray(), null);
+            JavaCodeExecutor.ExecutionResult execResult = JavaCodeExecutor.executeUserCode(request.getJavaCode(), request.getArray(), null);
             response.put("success", true);
-            response.put("result", result);
+            response.put("result", execResult.result);
+            response.put("executionTime", execResult.executionTimeMs);
         } catch (Exception e) {
             response.put("success", false);
             response.put("error", e.getMessage());
@@ -108,7 +109,8 @@ public class SortApiController {
             String algorithm = request.getTestAlgorithm();
 
             // ユーザーコード実行
-            List<Integer> userResult = JavaCodeExecutor.executeUserCode(request.getJavaCode(), inputData, algorithm);
+            JavaCodeExecutor.ExecutionResult execResult = JavaCodeExecutor.executeUserCode(request.getJavaCode(), inputData, algorithm);
+            List<Integer> userResult = execResult.result;
 
             // 正解データの生成（バックエンド実装を利用）
             int[] arr = inputData.stream().mapToInt(Integer::intValue).toArray();
@@ -133,6 +135,7 @@ public class SortApiController {
             response.put("success", true);
             response.put("userResult", userResult);
             response.put("backendResult", backendResult);
+            response.put("executionTime", execResult.executionTimeMs);
 } catch (Exception e) {
             response.put("success", false);
             response.put("error", e.getMessage());
