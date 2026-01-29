@@ -15,7 +15,7 @@
 
 <body>
     <h1 class="title">ソートアルゴリズム学習ツール</h1>
-    
+
     <div class="top-container">
         <div class="container-style visual-area">
             <header>
@@ -32,7 +32,7 @@
             </header>
             <div class="card-content">
                 <div class="control-group">
-                    <label for="arrayInput">数列入力 (スペース区切り):</label>
+                    <label for="arrayInput">数列入力 (スペース区切り ※入力がない場合自動でデータを生成します):</label>
                     <input type="text" id="arrayInput" placeholder="例: 5 2 8 1 9" />
                 </div>
 
@@ -140,6 +140,19 @@
                             <label for="testArraySize">テストデータサイズ:</label>
                             <input type="number" id="testArraySize" min="1" max="100" value="10" style="width: 60px;" />
                         </div>
+                        <!-- テストデータタイプ選択 -->
+                        <div style="margin-bottom: 10px;">
+                            <label for="testDataType">テストデータタイプ:</label>
+                            <select id="testDataType">
+                                <option value="random">ランダムデータ</option>
+                                <option value="sorted">昇順ソート済み</option>
+                                <option value="reverseSorted">降順ソート済み</option>
+                                <option value="duplicates">重複要素含む</option>
+                                <option value="negative">負の数を含む</option>
+                                <option value="nearlySorted">ほぼソート済み</option>
+                            </select>
+                        </div>
+
                         <!-- テストデータ表示 -->
                         <div style="margin-top: 10px;">
                             <div id="testData"
