@@ -748,17 +748,17 @@ const algData = {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> 最悪・平均ともに O(n<sup>2</sup>)。すでにソート済みの場合はO(n)で完了します。</li>
-            <li><strong>メリット:</strong>
+            <li style="margin-left: 20px;"><strong>時間計算量:</strong> 最悪・平均ともに O(n<sup>2</sup>)。すでにソート済みの場合はO(n)で完了します。</li>
+            <li style="margin-left: 20px;"><strong>メリット:</strong>
                 <ul>
-                    <li>アルゴリズムの理解と実装が非常に容易。</li>
-                    <li>安定ソートである（同じ値の順序が保存される）。</li>
+                    <li style="margin-left: 20px;">アルゴリズムの理解と実装が非常に容易。</li>
+                    <li style="margin-left: 20px;">安定ソートである（同じ値の順序が保存される）。</li>
                 </ul>
             </li>
-            <li><strong>デメリット:</strong>
+            <li style="margin-left: 20px;"><strong>デメリット:</strong>
                 <ul>
-                    <li>計算効率が悪く、大規模データには不向き。</li>
-                    <li>交換回数が多くなる傾向がある。</li>
+                    <li style="margin-left: 20px;">計算効率が悪く、大規模データには不向き。</li>
+                    <li style="margin-left: 20px;">交換回数が多くなる傾向がある。</li>
                 </ul>
             </li>
         </ul>
@@ -782,17 +782,17 @@ const algData = {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> データが一様に分布している場合、平均O(n + k)。</li>
-            <li><strong>メリット:</strong>
+            <li style="margin-left: 20px;"><strong>時間計算量:</strong> データが一様に分布している場合、平均O(n + k)。</li>
+            <li style="margin-left: 20px;"><strong>メリット:</strong>
                 <ul>
-                    <li>分布が均等であれば、比較ソートの限界 O(n log n) を超える高速化が可能。</li>
-                    <li>並列処理に適している。</li>
+                    <li style="margin-left: 20px;">分布が均等であれば、比較ソートの限界 O(n log n) を超える高速化が可能。</li>
+                    <li style="margin-left: 20px;">並列処理に適している。</li>
                 </ul>
             </li>
-            <li><strong>デメリット:</strong>
+            <li style="margin-left: 20px;"><strong>デメリット:</strong>
                 <ul>
-                    <li>データの分布に偏りがあると効率が劇的に低下する。</li>
-                    <li>バケツ用のメモリ領域が別途必要になる。</li>
+                    <li style="margin-left: 20px;">データの分布に偏りがあると効率が劇的に低下する。</li>
+                    <li style="margin-left: 20px;">バケツ用のメモリ領域が別途必要になる。</li>
                 </ul>
             </li>
         </ul>
@@ -823,17 +823,17 @@ private static void heapify(int[] arr, int n, int i) {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> 最悪・平均ともに O(nlog n) で安定しています。</li>
-            <li><strong>メリット:</strong>
+            <li style="margin-left: 20px;"><strong>時間計算量:</strong> 最悪・平均ともに O(nlog n) で安定しています。</li>
+            <li style="margin-left: 20px;"><strong>メリット:</strong>
                 <ul>
-                    <li>追加のメモリ領域をほとんど必要としない（定数空間）。</li>
-                    <li>最悪のケースでも計算量が O(nlog n) に収まる。</li>
+                    <li style="margin-left: 20px;">追加のメモリ領域をほとんど必要としない（定数空間）。</li>
+                    <li style="margin-left: 20px;">最悪のケースでも計算量が O(nlog n) に収まる。</li>
                 </ul>
             </li>
-            <li><strong>デメリット:</strong>
+            <li style="margin-left: 20px;"><strong>デメリット:</strong>
                 <ul>
-                    <li>安定ソートではない。</li>
-                    <li>キャッシュ効率がQuickSortに比べて劣る場合がある。</li>
+                    <li style="margin-left: 20px;">安定ソートではない。</li>
+                    <li style="margin-left: 20px;">キャッシュ効率がQuickSortに比べて劣る場合がある。</li>
                 </ul>
             </li>
         </ul>
@@ -857,16 +857,16 @@ private static void heapify(int[] arr, int n, int i) {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> 平均・最悪 (n<sup>2</sup>)。しかしデータがほぼ整列している場合はO(n)に近づきます。</li>
-            <li><strong>メリット:</strong>
+            <li style="margin-left: 20px;"><strong>時間計算量:</strong> 平均・最悪 (n<sup>2</sup>)。しかしデータがほぼ整列している場合はO(n)に近づきます。</li>
+            <li style="margin-left: 20px;"><strong>メリット:</strong>
                 <ul>
-                    <li>実装が簡単で、小規模データや「ほぼソート済み」のデータに非常に高速。</li>
-                    <li>安定ソートであり、オンラインアルゴリズムとして利用可能。</li>
+                    <li style="margin-left: 20px;">実装が簡単で、小規模データや「ほぼソート済み」のデータに非常に高速。</li>
+                    <li style="margin-left: 20px;">安定ソートであり、オンラインアルゴリズムとして利用可能。</li>
                 </ul>
             </li>
-            <li><strong>デメリット:</strong>
+            <li style="margin-left: 20px;"><strong>デメリット:</strong>
                 <ul>
-                    <li>逆順に並んでいるデータや大規模データに対しては非常に遅い。</li>
+                    <li style="margin-left: 20px;">逆順に並んでいるデータや大規模データに対しては非常に遅い。</li>
                 </ul>
             </li>
         </ul>
@@ -897,17 +897,17 @@ private static void merge(int[] arr, int left, int mid, int right) {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> 最悪・平均ともに O(nlog n)。</li>
-            <li><strong>メリット:</strong>
+            <li style="margin-left: 20px;"><strong>時間計算量:</strong> 最悪・平均ともに O(nlog n)。</li>
+            <li style="margin-left: 20px;"><strong>メリット:</strong>
                 <ul>
-                    <li>安定ソートである。</li>
-                    <li>データの並び順に関わらず計算量が一定で予測しやすい。</li>
-                    <li>連結リスト（Linked List）のソートに適している。</li>
+                    <li style="margin-left: 20px;">安定ソートである。</li>
+                    <li style="margin-left: 20px;">データの並び順に関わらず計算量が一定で予測しやすい。</li>
+                    <li style="margin-left: 20px;">連結リスト（Linked List）のソートに適している。</li>
                 </ul>
             </li>
-            <li><strong>デメリット:</strong>
+            <li style="margin-left: 20px;"><strong>デメリット:</strong>
                 <ul>
-                    <li>配列をソートする場合、O(n)の外部メモリが必要になる。</li>
+                    <li style="margin-left: 20px;">配列をソートする場合、O(n)の外部メモリが必要になる。</li>
                 </ul>
             </li>
         </ul>
@@ -943,17 +943,17 @@ private static int partition(int[] arr, int low, int high) {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> 平均 O(n<sup>2</sup>)。ピボットの選び方が悪いと最悪O(n<sup>2</sup>) になります。</li>
-            <li><strong>メリット:</strong>
+            <li style="margin-left: 20px;"><strong>時間計算量:</strong> 平均 O(n<sup>2</sup>)。ピボットの選び方が悪いと最悪O(n<sup>2</sup>) になります。</li>
+            <li style="margin-left: 20px;"><strong>メリット:</strong>
                 <ul>
-                    <li>実用上、最も高速なソートの一つであることが多い。</li>
-                    <li>内部ソートが可能で、追加メモリが少なくて済む。</li>
+                    <li style="margin-left: 20px;">実用上、最も高速なソートの一つであることが多い。</li>
+                    <li style="margin-left: 20px;">内部ソートが可能で、追加メモリが少なくて済む。</li>
                 </ul>
             </li>
-            <li><strong>デメリット:</strong>
+            <li style="margin-left: 20px;"><strong>デメリット:</strong>
                 <ul>
-                    <li>安定ソートではない。</li>
-                    <li>最悪のケースを避けるためにピボット選択の工夫が必要。</li>
+                    <li style="margin-left: 20px;">安定ソートではない。</li>
+                    <li style="margin-left: 20px;">最悪のケースを避けるためにピボット選択の工夫が必要。</li>
                 </ul>
             </li>
         </ul>
@@ -982,17 +982,17 @@ private static void countSort(int[] arr, int exp) {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> O(nk)（kは桁数）。</li>
-            <li><strong>メリット:</strong>
+            <li style="margin-left: 20px;"><strong>時間計算量:</strong> O(nk)（kは桁数）。</li>
+            <li style="margin-left: 20px;"><strong>メリット:</strong>
                 <ul>
-                    <li>整数や固定長の文字列など特定のデータ形式に対して非常に高速。</li>
-                    <li>安定ソートの実装が可能。</li>
+                    <li style="margin-left: 20px;">整数や固定長の文字列など特定のデータ形式に対して非常に高速。</li>
+                    <li style="margin-left: 20px;">安定ソートの実装が可能。</li>
                 </ul>
             </li>
-            <li><strong>デメリット:</strong>
+            <li style="margin-left: 20px;"><strong>デメリット:</strong>
                 <ul>
-                    <li>浮動小数点数など、複雑なデータのソートには適用しにくい。</li>
-                    <li>大きなメモリ空間が必要になる場合がある。</li>
+                    <li style="margin-left: 20px;">浮動小数点数など、複雑なデータのソートには適用しにくい。</li>
+                    <li style="margin-left: 20px;">大きなメモリ空間が必要になる場合がある。</li>
                 </ul>
             </li>
         </ul>
@@ -1015,17 +1015,17 @@ private static void countSort(int[] arr, int exp) {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> 常に O(n<sup>2</sup>)。</li>
-            <li><strong>メリット:</strong>
+            <li style="margin-left: 20px;"><strong>時間計算量:</strong> 常に O(n<sup>2</sup>)。</li>
+            <li style="margin-left: 20px;"><strong>メリット:</strong>
                 <ul>
-                    <li>データの書き込み（交換）回数が最大でもn-1回で済むため、書き込みコストが高い場合に有利。</li>
-                    <li>アルゴリズムが直感的で単純。</li>
+                    <li style="margin-left: 20px;">データの書き込み（交換）回数が最大でもn-1回で済むため、書き込みコストが高い場合に有利。</li>
+                    <li style="margin-left: 20px;">アルゴリズムが直感的で単純。</li>
                 </ul>
             </li>
-            <li><strong>デメリット:</strong>
+            <li style="margin-left: 20px;"><strong>デメリット:</strong>
                 <ul>
-                    <li>比較回数が多く、基本的には遅い。</li>
-                    <li>通常は安定ソートではない。</li>
+                    <li style="margin-left: 20px;">比較回数が多く、基本的には遅い。</li>
+                    <li style="margin-left: 20px;">通常は安定ソートではない。</li>
                 </ul>
             </li>
         </ul>
@@ -1049,17 +1049,17 @@ private static void countSort(int[] arr, int exp) {
 }</code></pre>
         </div>
         <ul>
-            <li><strong>時間計算量:</strong> ギャップの選び方に依存し、O(n<sup>1.3</sup>) から O(n<sup>2</sup>) の間。</li>
-            <li><strong>メリット:</strong>
+            <li style="margin-left: 20px;"><strong>時間計算量:</strong> ギャップの選び方に依存し、O(n<sup>1.3</sup>) から O(n<sup>2</sup>) の間。</li>
+            <li style="margin-left: 20px;"><strong>メリット:</strong>
                 <ul>
-                    <li>InsertionSortの改良版であり、中規模データまでは比較的高速。</li>
-                    <li>メモリ消費が少なく、実装コードも比較的短い。</li>
+                    <li style="margin-left: 20px;">挿入ソートの改良版であり、中規模データまでは比較的高速。</li>
+                    <li style="margin-left: 20px;">メモリ消費が少なく、実装コードも比較的短い。</li>
                 </ul>
             </li>
-            <li><strong>デメリット:</strong>
+            <li style="margin-left: 20px;"><strong>デメリット:</strong>
                 <ul>
-                    <li>最適なギャップ列の選定が難しく、最悪計算量の見積もりが複雑。</li>
-                    <li>安定ソートではない。</li>
+                    <li style="margin-left: 20px;">最適なギャップ列の選定が難しく、最悪計算量の見積もりが複雑。</li>
+                    <li style="margin-left: 20px;">安定ソートではない。</li>
                 </ul>
             </li>
         </ul>
