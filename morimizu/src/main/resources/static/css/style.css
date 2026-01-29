@@ -398,3 +398,31 @@ button:hover {
     border-radius: 4px;
     margin-top: 12px;
 }
+
+/* アルゴリズム説明内のコードブロック用スタイル */
+.code-block {
+    margin: 15px 0;
+    background-color: #f8f9fa;
+    border-left: 4px solid #0066cc;
+    border-radius: 4px;
+}
+
+.code-block h3 {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    background-color: #e9ecef;
+    color: #333;
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 12px;
+    overflow-x: auto;
+}
+
+.code-block code {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 13px;
+    color: #d63384;
+}

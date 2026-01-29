@@ -648,6 +648,21 @@ const algData = {
 
     "BubbleSort": `
         <p>バブルソートは、隣り合う要素を比較し、順序が逆であれば交換する操作を繰り返す単純なアルゴリズムです。</p>
+        <div class="code-block">
+            <h3>実装コード (Java)</h3>
+            <pre><code>public static void sort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}</code></pre>
+        </div>
         <ul>
             <li><strong>時間計算量:</strong> 最悪・平均ともに O(n<sup>2</sup>)。すでにソート済みの場合はO(n)で完了します。</li>
             <li><strong>メリット:</strong>
@@ -667,6 +682,21 @@ const algData = {
 
     "BucketSort": `
         <p>バケットソートは、データをいくつかのバケツ（バケット）に分割し、それぞれのバケツ内で個別にソートを行う手法です。</p>
+        <div class="code-block">
+            <h3>実装コード (Java)</h3>
+            <pre><code>public static void sort(int[] arr) {
+    int maxVal = 0;
+    for(int i : arr) if(i > maxVal) maxVal = i;
+    
+    int[] bucket = new int[maxVal + 1];
+    for (int i = 0; i < arr.length; i++) bucket[arr[i]]++;
+
+    int outPos = 0;
+    for (int i = 0; i < bucket.length; i++) {
+        for (int j = 0; j < bucket[i]; j++) arr[outPos++] = i;
+    }
+}</code></pre>
+        </div>
         <ul>
             <li><strong>時間計算量:</strong> データが一様に分布している場合、平均O(n + k)。</li>
             <li><strong>メリット:</strong>
@@ -686,6 +716,28 @@ const algData = {
 
     "HeapSort": `
         <p>ヒープソートは、ヒープ（二分ヒープ）というデータ構造を利用して最大値（または最小値）を取り出し続けることで整列を行います。</p>
+        <div class="code-block">
+            <h3>実装コード (Java)</h3>
+            <pre><code>public static void sort(int[] arr) {
+    int n = arr.length;
+    for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i);
+    for (int i = n - 1; i > 0; i--) {
+        int temp = arr[0]; arr[0] = arr[i]; arr[i] = temp;
+        heapify(arr, i, 0);
+    }
+}
+private static void heapify(int[] arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    if (left < n && arr[left] > arr[largest]) largest = left;
+    if (right < n && arr[right] > arr[largest]) largest = right;
+    if (largest != i) {
+        int swap = arr[i]; arr[i] = arr[largest]; arr[largest] = swap;
+        heapify(arr, n, largest);
+    }
+}</code></pre>
+        </div>
         <ul>
             <li><strong>時間計算量:</strong> 最悪・平均ともに O(nlog n) で安定しています。</li>
             <li><strong>メリット:</strong>
@@ -705,6 +757,21 @@ const algData = {
 
     "InsertionSort": `
         <p>挿入ソートは、整列済みの部分列に対して、新しい要素を適切な位置に挿入していく手法です。</p>
+        <div class="code-block">
+            <h3>実装コード (Java)</h3>
+            <pre><code>public static void sort(int[] arr) {
+    int n = arr.length;
+    for (int i = 1; i < n; ++i) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}</code></pre>
+        </div>
         <ul>
             <li><strong>時間計算量:</strong> 平均・最悪 (n<sup>2</sup>)。しかしデータがほぼ整列している場合はO(n)に近づきます。</li>
             <li><strong>メリット:</strong>
@@ -723,6 +790,28 @@ const algData = {
 
     "MergeSort": `
         <p>マージソートは、データを半分に分割し続け、それらを整列しながら併合（マージ）する分割統治法のアルゴリズムです。</p>
+        <div class="code-block">
+            <h3>実装コード (Java)</h3>
+            <pre><code>public static void sort(int[] arr, int left, int right) {
+    if (left < right) {
+        int mid = (left + right) / 2;
+        sort(arr, left, mid);
+        sort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+private static void merge(int[] arr, int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    int[] L = new int[n1]; int[] R = new int[n2];
+    for (int i = 0; i < n1; ++i) L[i] = arr[left + i];
+    for (int j = 0; j < n2; ++j) R[j] = arr[mid + 1 + j];
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) { if (L[i] <= R[j]) arr[k++] = L[i++]; else arr[k++] = R[j++]; }
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+}</code></pre>
+        </div>
         <ul>
             <li><strong>時間計算量:</strong> 最悪・平均ともに O(nlog n)。</li>
             <li><strong>メリット:</strong>
@@ -742,6 +831,33 @@ const algData = {
 
     "QuickSort": `
         <p>クイックソートは、基準値（ピボット）を選び、それより小さいグループと大きいグループに分割して再帰的にソートする手法です。</p>
+        <div class="code-block">
+            <h3>実装コード (Java)</h3>
+            <pre><code>private static void quickSort(int[] arr, int low, int high) {
+    if (low < high) {
+        int partitionIndex = partition(arr, low, high);
+        quickSort(arr, low, partitionIndex - 1);
+        quickSort(arr, partitionIndex + 1, high);
+    }
+}
+
+private static int partition(int[] arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    return i + 1;
+}</code></pre>
+        </div>
         <ul>
             <li><strong>時間計算量:</strong> 平均 O(n<sup>2</sup>)。ピボットの選び方が悪いと最悪O(n<sup>2</sup>) になります。</li>
             <li><strong>メリット:</strong>
@@ -761,6 +877,26 @@ const algData = {
 
     "RadixSort": `
         <p>基数ソートは、要素同士の比較を行わず、数値の桁（基数）ごとの値に基づいてバケツに振り分ける手法です。</p>
+        <div class="code-block">
+            <h3>実装コード (Java)</h3>
+            <pre><code>public static void sort(int[] arr) {
+    int max = arr[0];
+    for (int i : arr) if (i > max) max = i;
+    for (int exp = 1; max / exp > 0; exp *= 10) countSort(arr, exp);
+}
+private static void countSort(int[] arr, int exp) {
+    int n = arr.length;
+    int[] output = new int[n];
+    int[] count = new int[10];
+    for (int i = 0; i < n; i++) count[(arr[i] / exp) % 10]++;
+    for (int i = 1; i < 10; i++) count[i] += count[i - 1];
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+        count[(arr[i] / exp) % 10]--;
+    }
+    for (int i = 0; i < n; i++) arr[i] = output[i];
+}</code></pre>
+        </div>
         <ul>
             <li><strong>時間計算量:</strong> O(nk)（kは桁数）。</li>
             <li><strong>メリット:</strong>
@@ -780,6 +916,20 @@ const algData = {
 
     "SelectionSort": `
         <p>選択ソートは、未ソート部分から最小（または最大）の要素を選び出し、先頭の要素と交換していく手法です。</p>
+        <div class="code-block">
+            <h3>実装コード (Java)</h3>
+            <pre><code>public static void sort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < n - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < n; j++)
+            if (arr[j] < arr[min_idx]) min_idx = j;
+        int temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
+    }
+}</code></pre>
+        </div>
         <ul>
             <li><strong>時間計算量:</strong> 常に O(n<sup>2</sup>)。</li>
             <li><strong>メリット:</strong>
@@ -799,6 +949,21 @@ const algData = {
 
     "ShellSort": `
         <p>シェルソートは、一定の間隔（ギャップ）を空けた要素同士で挿入ソートを行い、徐々に間隔を縮めていく手法です。</p>
+        <div class="code-block">
+            <h3>実装コード (Java)</h3>
+            <pre><code>public static void sort(int[] arr) {
+    int n = arr.length;
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i++) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap)
+                arr[j] = arr[j - gap];
+            arr[j] = temp;
+        }
+    }
+}</code></pre>
+        </div>
         <ul>
             <li><strong>時間計算量:</strong> ギャップの選び方に依存し、O(n<sup>1.3</sup>) から O(n<sup>2</sup>) の間。</li>
             <li><strong>メリット:</strong>
