@@ -531,6 +531,7 @@ async function compileAndTestJava() {
  * テストデータを生成して実行
  */
 async function generateAndTest() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
     const testAlgorithm = document.getElementById('testAlgorithm').value;
     const testArraySize = parseInt(document.getElementById('testArraySize').value);
     const testDataType = document.getElementById('testDataType') ? document.getElementById('testDataType').value : 'random';
@@ -551,6 +552,8 @@ async function generateAndTest() {
 
     // TestDataGeneratorを使用してテストデータを生成
     try {
+        // ローディング開始
+        loadingOverlay.classList.add('active');
         const generateResponse = await fetch('/api/generate-test-data', {
             method: 'POST',
             headers: {
@@ -626,6 +629,9 @@ async function generateAndTest() {
     } catch (error) {
         console.error('Error:', error);
         alert('エラーが発生しました: ' + error.message);
+    } finally {
+        // ローディング終了
+        loadingOverlay.classList.remove('active');
     }
 }
 
