@@ -47,6 +47,22 @@ function init() {
     // アルゴリズム選択時にコントロールパネルを更新
     algorithmSelect.addEventListener('change', () => {
         updateControlPanel();
+
+        // アルゴリズム説明パネルの選択も連動させる
+        // changeAlg関数を呼んでいるセレクトボックスを探す（IDに依存しない方法）
+        const infoSelect = document.querySelector('select[onchange*="changeAlg"]');
+        if (infoSelect) {
+            // 選択されたアルゴリズムの名称（テキスト）を取得
+            const selectedText = algorithmSelect.options[algorithmSelect.selectedIndex].text;
+            // 名称自体が同じものを探してそれに変更する
+            for (let i = 0; i < infoSelect.options.length; i++) {
+                if (infoSelect.options[i].text === selectedText) {
+                    infoSelect.selectedIndex = i;
+                    infoSelect.dispatchEvent(new Event('change'));
+                    break;
+                }
+            }
+        }
     });
 
     // ボタンイベント
