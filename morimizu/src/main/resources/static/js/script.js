@@ -508,12 +508,13 @@ async function compileAndTestJava() {
         if (result.success) {
             const userResult = result.userResult;
             const backendResult = result.backendResult;
+            const executionTime = result.executionTime;
 
             document.getElementById('yourAnswer').textContent = JSON.stringify(userResult, null, 2);
             document.getElementById('correctAnswer').textContent = JSON.stringify(backendResult, null, 2);
 
             // 結果を比較
-            compareTestResults(userResult, backendResult, testResultsDiv, statusDiv);
+            compareTestResults(userResult, backendResult, testResultsDiv, statusDiv, executionTime);
         } else {
             errorDiv.textContent = 'コンパイルエラー: ' + result.error;
             errorDiv.style.display = 'block';
@@ -613,11 +614,12 @@ async function generateAndTest() {
             }
 
             const userResult = data.result;
+            const executionTime = data.executionTime;
             document.getElementById('yourAnswer').textContent = JSON.stringify(userResult, null, 2);
             document.getElementById('result').textContent = JSON.stringify(userResult, null, 2);
 
             // バックエンドの実装結果を取得して比較
-            fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv);
+            fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv, executionTime);
         } catch (error) {
             errorDiv.textContent = 'ユーザーコードのエラー: ' + error.message;
             errorDiv.style.display = 'block';
@@ -651,7 +653,7 @@ function displayTestData(testData) {
 /**
  * バックエンドから結果を取得して比較
  */
-async function fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv) {
+async function fetchBackendResult(testData, testAlgorithm, userResult, testResultsDiv, statusDiv, executionTime) {
     try {
         // バックエンドAPIを呼び出し
         const response = await fetch('/api/test-algorithm', {
@@ -674,7 +676,7 @@ async function fetchBackendResult(testData, testAlgorithm, userResult, testResul
         document.getElementById('correctAnswer').textContent = JSON.stringify(backendResult, null, 2);
 
         // 結果を比較
-        compareTestResults(userResult, backendResult, testResultsDiv, statusDiv);
+        compareTestResults(userResult, backendResult, testResultsDiv, statusDiv, executionTime);
     } catch (error) {
         console.error('Error:', error);
         testResultsDiv.innerHTML = '<p style="color: red;">バックエンド通信エラー: ' + error.message + '</p>';
@@ -684,11 +686,16 @@ async function fetchBackendResult(testData, testAlgorithm, userResult, testResul
 /**
  * テスト結果を比較
  */
-function compareTestResults(userResult, correctResult, testResultsDiv, statusDiv) {
+function compareTestResults(userResult, correctResult, testResultsDiv, statusDiv, executionTime) {
     const isCorrect = arraysEqual(userResult, correctResult);
+    
+    let timeHtml = '';
+    if (executionTime !== undefined) {
+        timeHtml = `<div style="margin-top: 5px; font-size: 0.9em; color: #333; font-weight: bold;">実行時間: ${executionTime.toFixed(4)} ms</div>`;
+    }
 
     if (isCorrect) {
-        statusDiv.innerHTML = '<div style="background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px;">合格</div>';
+        statusDiv.innerHTML = `<div style="background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px;">合格</div>${timeHtml}`;
         testResultsDiv.innerHTML = '<p style="color: #4CAF50; font-weight: bold;">あなたの実装は正解です！</p>';
     } else {
         statusDiv.innerHTML = '<div style="background-color: #f44336; color: white; padding: 10px; border-radius: 5px;">不合格</div>';
