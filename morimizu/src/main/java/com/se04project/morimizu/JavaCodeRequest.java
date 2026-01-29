@@ -5,6 +5,8 @@ import java.util.List;
 public class JavaCodeRequest {
     private String javaCode;
     private List<Integer> array;
+    private List<Integer> testData;
+    private String testAlgorithm;
 
     public JavaCodeRequest() {
     }
@@ -28,5 +30,21 @@ public class JavaCodeRequest {
 
     public void setArray(List<Integer> array) {
         this.array = array;
+    }
+
+    public List<Integer> getTestData() {
+        return testData;
+    }
+
+    public void setTestData(List<Integer> testData) {
+        this.testData = testData;
+    }
+
+    public String getTestAlgorithm() {
+        return testAlgorithm;
+    }
+
+    public void setTestAlgorithm(String testAlgorithm) {
+        this.testAlgorithm = testAlgorithm;
     }
 }

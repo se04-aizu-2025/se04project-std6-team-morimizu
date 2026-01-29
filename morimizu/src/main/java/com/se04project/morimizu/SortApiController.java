@@ -82,9 +82,58 @@ public class SortApiController {
 
         try {
             // ユーザーコードを実行
-            List<Integer> result = JavaCodeExecutor.executeUserCode(request.getJavaCode(), request.getArray());
+            List<Integer> result = JavaCodeExecutor.executeUserCode(request.getJavaCode(), request.getArray(), null);
             response.put("success", true);
             response.put("result", result);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", e.getMessage());
+        }
+
+        return response;
+    }
+
+    /**
+     * コンパイルとテストを一括で行うAPI
+     */
+    @PostMapping("/compile-and-test")
+    public Map<String, Object> compileAndTest(@RequestBody JavaCodeRequest request) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Integer> inputData = request.getTestData();
+            if (inputData == null) {
+                inputData = request.getArray();
+            }
+            String algorithm = request.getTestAlgorithm();
+
+            // ユーザーコード実行
+            List<Integer> userResult = JavaCodeExecutor.executeUserCode(request.getJavaCode(), inputData, algorithm);
+
+            // 正解データの生成（バックエンド実装を利用）
+            int[] arr = inputData.stream().mapToInt(Integer::intValue).toArray();
+            switch (algorithm) {
+                case "bubbleSort": BubbleSort.sort(arr); break;
+                case "selectionSort": SelectionSort.sort(arr); break;
+                case "insertionSort": InsertionSort.sort(arr); break;
+                case "quickSort": QuickSort.sort(arr); break;
+                case "mergeSort": MergeSort.sort(arr); break;
+                case "heapSort": HeapSort.heapSort(arr); break;
+                case "shellSort": ShellSort.sort(arr); break;
+                case "bucketSort": BucketSort.bucketSort(arr); break;
+                case "radixSort": RadixSort.sort(arr); break;
+                default: BubbleSort.sort(arr);
+            }
+            
+            List<Integer> backendResult = new ArrayList<>();
+            for (int val : arr) {
+                backendResult.add(val);
+            }
+
+            response.put("success", true);
+            response.put("userResult", userResult);
+            response.put("backendResult", backendResult);
+
         } catch (Exception e) {
             response.put("success", false);
             response.put("error", e.getMessage());
