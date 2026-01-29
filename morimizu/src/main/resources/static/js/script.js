@@ -833,7 +833,7 @@ private static void merge(int[] arr, int left, int mid, int right) {
         <p>クイックソートは、基準値（ピボット）を選び、それより小さいグループと大きいグループに分割して再帰的にソートする手法です。</p>
         <div class="code-block">
             <h3>実装コード (Java)</h3>
-            <pre><code>private static void quickSort(int[] arr, int low, int high) {
+            <pre><code>public static void quickSort(int[] arr, int low, int high) {
     if (low < high) {
         int partitionIndex = partition(arr, low, high);
         quickSort(arr, low, partitionIndex - 1);
