@@ -36,7 +36,7 @@
 
         <div class="container-style control-panel">
             <header>
-                <h2>アルゴリズム操作パネル</h2>
+                <h2>ソートアルゴリズム操作パネル</h2>
             </header>
             <div class="card-content">
                 <div class="control-group">
@@ -91,7 +91,7 @@
 
     <div class="description container-style">
         <header>
-            <h2>アルゴリズムの説明</h2>
+            <h2>ソートアルゴリズムの説明</h2>
         </header>
         <div class="card-content">
             <select id="mySelect" onchange="changeAlg(this, 'contentArea')">
@@ -112,15 +112,29 @@
 
     <div class="container">
         <header>
-            <h1>アルゴリズム実装</h1>
+            <h1>ソートアルゴリズム実装</h1>
         </header>
         <div class="content">
             <div>
                 <div class="section">
                     <h2>エディター</h2>
 
-                    <textarea id="userCode"
-                        placeholder="Javaコードを入力してください&#10;&#10;例:&#10;for (int i = 0; i < arr.length - 1; i++) {&#10;    for (int j = 0; j < arr.length - 1 - i; j++) {&#10;        if (arr[j] > arr[j + 1]) {&#10;            int temp = arr[j];&#10;            arr[j] = arr[j + 1];&#10;            arr[j + 1] = temp;&#10;        }&#10;    }&#10;}"></textarea>
+                    <textarea id="userCode" 
+                    placeholder="Javaコードを入力してください
+
+例:
+public static void sort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}"></textarea>
 
                     <!-- テスト設定エリア -->
                     <div style="margin-top: 15px; padding: 10px; background-color: #f5f5f5; border-radius: 5px;">
@@ -163,6 +177,7 @@
 
                         <!-- テストデータ表示 -->
                         <div style="margin-top: 10px;">
+                            <label>アルゴリズムに渡される引数(int型配列):</label>
                             <div id="testData"
                                 style="padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 3px; min-height: 40px;">
                                 テストデータはここに表示されます</div>
